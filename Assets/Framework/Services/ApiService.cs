@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -12,9 +13,17 @@ namespace Framework.Services
         [Serializable]
         public class ApiResponse<T>
         {
-            public bool Success { get; set; }
-            public string? Message { get; set; }
-            public T? Data { get; set; }
+            public bool success { get; set; }
+            public string? message { get; set; }
+            public T? data { get; set; }
+        }
+        
+        [Serializable]
+        public class UserAuthResponse
+        {
+            public string token { get; set; }
+            public string userId { get; set; }
+            public string email { get; set; }
         }
         
         // GET request method
@@ -34,15 +43,15 @@ namespace Framework.Services
                     throw new Exception(request.error);
                 
                 var response = request.downloadHandler.text;
-                return JsonUtility.FromJson<T>(response);
+                return JsonConvert.DeserializeObject<T>(response);
             }
         }
 
         // POST request method
         public static async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest data)
         {
-            var jsonData = JsonUtility.ToJson(data);
-
+            var jsonData = JsonConvert.SerializeObject(data);
+            
             using (UnityWebRequest request = new UnityWebRequest($"{BASE_URL}/{endpoint}", "POST"))
             {
                 var bodyRaw = Encoding.UTF8.GetBytes(jsonData);
@@ -61,7 +70,7 @@ namespace Framework.Services
                     throw new Exception(request.error);
                 
                 var response = request.downloadHandler.text;
-                return JsonUtility.FromJson<TResponse>(response);
+                return JsonConvert.DeserializeObject<TResponse>(response);
             }
         }
     }

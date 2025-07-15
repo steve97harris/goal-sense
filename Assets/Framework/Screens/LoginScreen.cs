@@ -25,15 +25,15 @@ namespace Framework.Screens
             {
                 var response = await LoginService.LoginAsync(_emailInput.text, _passwordInput.text);
                 
-                if (response.Success && response.Data != null)
+                if (response.success && response.data != null)
                 {
-                    Debug.Log($"Login successful! Token: {response.Data.Token}");
-                    PlayerPrefs.SetString(PlayerPrefsKeys.JWT_TOKEN, response.Data.Token);
-                    PlayerPrefs.SetString(PlayerPrefsKeys.USER_ID, response.Data.UserId);
+                    Debug.Log($"Login successful! Token: {response.data.token}");
+                    PlayerPrefs.SetString(PlayerPrefsKeys.JWT_TOKEN, response.data.token);
+                    PlayerPrefs.SetString(PlayerPrefsKeys.USER_ID, response.data.userId);
                 }
                 else
                 {
-                    Debug.LogError($"Login failed: {response.Message}");
+                    Debug.LogError($"Login failed: {response.message}");
                 }
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 namespace Framework.Services
 {
     public class LoginService : ApiService
@@ -8,23 +9,15 @@ namespace Framework.Services
         [Serializable]
         public class LoginRequest
         {
-            public string Email;
-            public string Password;
+            public string Email { get; set; }
+            public string Password { get; set; }
         }
 
-        [Serializable]
-        public class LoginResponse
-        {
-            public string Token;
-            public string UserId;
-            public string Email;
-        }
-
-        public static async Task<ApiResponse<LoginResponse>> LoginAsync(string email, string password)
+        public static async Task<ApiResponse<UserAuthResponse>> LoginAsync(string email, string password)
         {
             try
             {
-                const string endpoint = "/usermanagement/login";
+                const string endpoint = "usermanagement/login";
 
                 // Create the request data
                 var loginData = new LoginRequest
@@ -33,12 +26,12 @@ namespace Framework.Services
                     Password = password
                 };
                 
-                return await PostAsync<LoginRequest, ApiResponse<LoginResponse>>(endpoint, loginData);;
+                return await PostAsync<LoginRequest, ApiResponse<UserAuthResponse>>(endpoint, loginData);;
             }
             catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
-                return new ApiResponse<LoginResponse> { Success = false, Message = ex.Message };
+                return new ApiResponse<UserAuthResponse> { success = false, message = ex.Message };
             }
         }
     }

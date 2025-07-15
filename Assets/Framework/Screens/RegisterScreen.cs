@@ -52,15 +52,15 @@ namespace Framework.Screens
                 var response = await RegisterService.RegisterAsync(_emailInput.text, 
                     _passwordInput.text, _confirmPasswordInput.text);
                 
-                if (response.Success && response.Data != null)
+                if (response.success && response.data != null)
                 {
-                    Debug.Log($"Registration successful! Token: {response.Data.Token}");
-                    PlayerPrefs.SetString(PlayerPrefsKeys.JWT_TOKEN, response.Data.Token);
-                    PlayerPrefs.SetString(PlayerPrefsKeys.USER_ID, response.Data.UserId);
+                    Debug.Log($"Registration successful! Token: {response.data.token}");
+                    PlayerPrefs.SetString(PlayerPrefsKeys.JWT_TOKEN, response.data.token);
+                    PlayerPrefs.SetString(PlayerPrefsKeys.USER_ID, response.data.userId);
                 }
                 else
                 {
-                    Debug.LogError($"Registration failed: {response.Message}");
+                    Debug.LogError($"Registration failed: {response.message}");
                 }
             }
             catch (Exception ex)

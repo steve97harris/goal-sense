@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 namespace Framework.Services
 {
     public class RegisterService : ApiService
@@ -8,24 +9,16 @@ namespace Framework.Services
         [Serializable]
         public class RegisterRequest
         {
-            public string Email;
-            public string Password;
-            public string ConfirmPassword;
+            public string Email { get; set; }
+            public string Password { get; set; }
+            public string ConfirmPassword { get; set; }
         }
-
-        [Serializable]
-        public class RegisterResponse
-        {
-            public string Token;
-            public string UserId;
-            public string Email;
-        }
-
-        public static async Task<ApiResponse<RegisterResponse>> RegisterAsync(string email, string password, string confirmPassword)
+        
+        public static async Task<ApiResponse<UserAuthResponse>> RegisterAsync(string email, string password, string confirmPassword)
         {
             try
             {
-                const string endpoint = "/usermanagement/register";
+                const string endpoint = "usermanagement/register";
 
                 // Create the request data
                 var registerData = new RegisterRequest
@@ -35,12 +28,12 @@ namespace Framework.Services
                     ConfirmPassword = confirmPassword
                 };
                 
-                return await PostAsync<RegisterRequest, ApiResponse<RegisterResponse>>(endpoint, registerData);;
+                return await PostAsync<RegisterRequest, ApiResponse<UserAuthResponse>>(endpoint, registerData);;
             }
             catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
-                return new ApiResponse<RegisterResponse> { Success = false, Message = ex.Message };
+                return new ApiResponse<UserAuthResponse> { success = false, message = ex.Message };
             }
         }
     }
