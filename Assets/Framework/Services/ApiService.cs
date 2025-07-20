@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -27,13 +29,20 @@ namespace Framework.Services
         }
         
         // GET request method
-        public static async Task<T> GetAsync<T>(string endpoint)
+        public static async Task<T> GetAsync<T>(string endpoint, Dictionary<string, string> queryParams = null)
         {
-            using (UnityWebRequest request = UnityWebRequest.Get($"{BASE_URL}/{endpoint}"))
+            var queryString = "";
+            if (queryParams is {Count: > 0})
+            {
+                queryString = "?" + string.Join("&", queryParams.Select(kvp => 
+                    $"{UnityWebRequest.EscapeURL(kvp.Key)}={UnityWebRequest.EscapeURL(kvp.Value)}"));
+            }
+
+            using (UnityWebRequest request = UnityWebRequest.Get($"{BASE_URL}/{endpoint}{queryString}"))
             {
                 // Set headers
                 request.SetRequestHeader("Content-Type", "application/json");
-
+                
                 var operation = request.SendWebRequest();
 
                 while (!operation.isDone)
