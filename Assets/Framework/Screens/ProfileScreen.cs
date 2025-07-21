@@ -13,6 +13,9 @@ namespace Framework.Screens
 {
     public class ProfileScreen : Screen
     {
+        public override ScreenName screenName => ScreenName.ProfileScreen;
+        public override ScreenViewport screenViewport => ScreenViewport.MainView;
+        
         [SerializeField] private TMP_Text _text;
         [SerializeField] private Button _logoutButton;
 
@@ -22,7 +25,7 @@ namespace Framework.Screens
             var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
             var jwtToken = PlayerPrefs.GetString(PlayerPrefsKeys.JWT_TOKEN);
             var email = GetEmailFromJwtToken(jwtToken);
-            _text.text = $"User ID: {userId}\nEmail: {email}";
+            _text.text = $"User ID: {userId}\nEmail: {email.Value}";
         }
 
         private void HandleLogout()

@@ -12,9 +12,11 @@ namespace Framework.Services
             public string Email { get; set; }
             public string Password { get; set; }
             public string ConfirmPassword { get; set; }
+            public string UserFullName { get; set; }
         }
         
-        public static async Task<ApiResponse<UserAuthResponse>> RegisterAsync(string email, string password, string confirmPassword)
+        public static async Task<ApiResponse<UserAuthResponse>> RegisterAsync(string email, 
+            string password, string confirmPassword, string userFullName)
         {
             try
             {
@@ -25,7 +27,8 @@ namespace Framework.Services
                 {
                     Email = email,
                     Password = password,
-                    ConfirmPassword = confirmPassword
+                    ConfirmPassword = confirmPassword,
+                    UserFullName = userFullName
                 };
                 
                 return await PostAsync<RegisterRequest, ApiResponse<UserAuthResponse>>(endpoint, registerData);;

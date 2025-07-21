@@ -8,6 +8,10 @@ namespace Framework.Screens
 {
     public class RegisterScreen : Screen
     {
+        public override ScreenName screenName => ScreenName.RegisterScreen;
+        public override ScreenViewport screenViewport => ScreenViewport.ForegroundView;
+        
+        [SerializeField] private TMP_InputField _nameInput;
         [SerializeField] private TMP_InputField _emailInput;
         [SerializeField] private TMP_InputField _passwordInput;
         [SerializeField] private TMP_InputField _confirmPasswordInput;
@@ -43,6 +47,11 @@ namespace Framework.Screens
         {
             try
             {
+                if (string.IsNullOrEmpty(_nameInput.text))
+                {
+                    Debug.LogError("Name is empty");
+                    return;
+                }
                 if (!_passwordInput.text.Equals(_confirmPasswordInput.text))
                 {
                     Debug.LogError("Passwords do not match");
@@ -50,13 +59,14 @@ namespace Framework.Screens
                 }
 
                 var response = await RegisterService.RegisterAsync(_emailInput.text, 
-                    _passwordInput.text, _confirmPasswordInput.text);
+                    _passwordInput.text, _confirmPasswordInput.text, _nameInput.text);
                 
                 if (response.success && response.data != null)
                 {
                     Debug.Log($"Registration successful! Token: {response.data.token}");
                     PlayerPrefs.SetString(PlayerPrefsKeys.JWT_TOKEN, response.data.token);
                     PlayerPrefs.SetString(PlayerPrefsKeys.USER_ID, response.data.userId);
+                    PlayerPrefs.SetString(PlayerPrefsKeys.USER_FULL_NAME, response.data.userFullName);
                 }
                 else
                 {

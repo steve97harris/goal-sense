@@ -11,6 +11,9 @@ namespace Framework.Screens
 {
     public class PredictionsScreen : Screen
     {
+        public override ScreenName screenName => ScreenName.PredictionsScreen;
+        public override ScreenViewport screenViewport => ScreenViewport.MainView;
+        
         public static PredictionsScreen Instance;
         
         [SerializeField] private GameweekButton _gameweekButton;
@@ -18,6 +21,7 @@ namespace Framework.Screens
         [SerializeField] private Transform _gameweeksContent;
         [SerializeField] private Transform _predictionsContent;
 
+        private string _currentGameweek;
         private List<PredictionView> _predictionPanels = new List<PredictionView>();
         private List<GameweekButton> _gameweekButtons = new List<GameweekButton>();
 
@@ -30,6 +34,12 @@ namespace Framework.Screens
             Initialize();
         }
 
+        private void Start()
+        {
+            if (!string.IsNullOrEmpty(_currentGameweek))
+                TriggerGameweekButton(_currentGameweek);
+        }
+
         private void OnApplicationQuit()
         {
             foreach (Transform child in _predictionsContent)
@@ -40,20 +50,24 @@ namespace Framework.Screens
 
         private async void Initialize()
         {
-            Debug.Log("Load prediction panels");
+            Debug.Log("Initialize predictions screen");
             var existingPredictions = new List<PredictionsService.PredictionResponse>();
             var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
+            if (string.IsNullOrEmpty(userId))
+            {
+                Debug.LogError("User ID is null, please login");
+                return;
+            }
             var response = await PredictionsService.GetPredictionsAsync(userId);
             if (response.success && response.data != null)
                 existingPredictions = response.data;
 
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
             var premierLeagueFixtures = await FixturesService.GetPremierLeagueFixturesAsync();
-            var currentGameweek = GetCurrentGameweek(premierLeagueFixtures, dateTimeNowGmt);
-            var gameweeks = premierLeagueFixtures.Select(x => x.Matchweek).Distinct().OrderBy(x => x).ToList();
+            _currentGameweek = GetCurrentGameweek(premierLeagueFixtures, dateTimeNowGmt);
+            var gameweeks = premierLeagueFixtures.Select(x => x.Matchweek).Distinct().OrderBy(int.Parse).ToList();
             LoadGameweekButtons(gameweeks);
             LoadMatchesForPredictions(premierLeagueFixtures, existingPredictions, dateTimeNowGmt);
-            TriggerGameweekButton(currentGameweek);
         }
 
         private void TriggerGameweekButton(string gameweek)
@@ -112,6 +126,13 @@ namespace Framework.Screens
         {
             foreach (var predictionPanel in _predictionPanels)
                 predictionPanel.gameObject.SetActive(predictionPanel.Fixture.Matchweek == gameweek);
+        }
+
+        public void SetGameweekButtonsView(GameweekButton gameweekButton)
+        {
+            foreach (var btn in _gameweekButtons)
+                btn.underline.gameObject.SetActive(false);
+            gameweekButton.underline.gameObject.SetActive(true);
         }
 
         private static string GetCurrentGameweek(List<FixturesService.Fixture> fixtures, DateTime dateTimeNowGmt)

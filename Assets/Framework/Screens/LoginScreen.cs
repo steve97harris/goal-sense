@@ -8,10 +8,14 @@ namespace Framework.Screens
 {
     public class LoginScreen : Screen
     {
+        public override ScreenName screenName => ScreenName.LoginScreen;
+        public override ScreenViewport screenViewport => ScreenViewport.ForegroundView;
+        
         [SerializeField] private TMP_InputField _emailInput;
         [SerializeField] private TMP_InputField _passwordInput;
         [SerializeField] private Button _loginButton;
         [SerializeField] private Button _registerButton;
+        [SerializeField] private TMP_Text _errorText;
 
         private void Start()
         {
@@ -34,6 +38,8 @@ namespace Framework.Screens
                 else
                 {
                     Debug.LogError($"Login failed: {response.message}");
+                    _errorText.text = $"Login failed: {response.message}";
+                    _errorText.gameObject.SetActive(true);
                 }
             }
             catch (Exception ex)

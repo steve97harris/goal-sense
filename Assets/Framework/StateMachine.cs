@@ -1,4 +1,6 @@
-﻿using Framework.Screens;
+﻿using Framework.Extensions;
+using Framework.Screens;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,8 +14,15 @@ namespace Framework
         LoginScreen,
         RegisterScreen,
         ProfileScreen,
-        MiniLeaguesScreen
+        MiniLeaguesScreen,
+        FirstLoadScreen
     }
+    public enum ScreenViewport
+    {
+        MainView,
+        ForegroundView
+    }
+    
     public class StateMachine : MonoBehaviour
     {
         public static StateMachine Instance;
@@ -23,6 +32,9 @@ namespace Framework
         private Dictionary<ScreenName, Screen> _screenDict;
         private Screen _currentScreen;
         private Screen _previousScreen;
+
+        [SerializeField] private Transform _mainView;
+        [SerializeField] private Transform _foregroundView;
 
         private void Awake()
         {
@@ -35,8 +47,9 @@ namespace Framework
             foreach (var screen in screens)
                 _screenDict[screen.screenName] = screen;
             
-            DisableAllScreens();
-            // ChangeState(ScreenName.HomeScreen);
+            var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
+            ChangeState(!string.IsNullOrEmpty(userId) ? 
+                ScreenName.HomeScreen : ScreenName.FirstLoadScreen);
         }
 
         public void ChangeState(ScreenName screenName)
@@ -44,18 +57,14 @@ namespace Framework
             if (_currentScreen != null)
             {
                 _previousScreen = _currentScreen;
-                _currentScreen.gameObject.SetActive(false);
+                Destroy(_currentScreen.gameObject);
             }
 
             if (_screenDict.TryGetValue(screenName, out var nextScreen))
-            {
-                _currentScreen = nextScreen;
-                _currentScreen.gameObject.SetActive(true);
-            }
+                _currentScreen = Instantiate(nextScreen, 
+                    GetViewport(nextScreen.screenViewport));
             else
-            {
                 Debug.LogWarning($"Screen '{screenName}' not found.");
-            }
         }
 
         public void GoBack()
@@ -63,10 +72,16 @@ namespace Framework
             ChangeState(_previousScreen.screenName);
         }
 
-        private void DisableAllScreens()
+        private Transform GetViewport(ScreenViewport viewport)
         {
-            foreach (var uiScreen in _screenDict)
-                uiScreen.Value.gameObject.SetActive(false);
+            switch (viewport)
+            {
+                case ScreenViewport.ForegroundView:
+                    return _foregroundView;
+                case ScreenViewport.MainView:
+                default:
+                    return _mainView;
+            }
         }
     }
 }

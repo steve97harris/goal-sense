@@ -31,12 +31,13 @@ namespace Framework.Services
             {
                 const string endpoint = "predictions/get-prediction";
 
-                return await GetAsync<ApiResponse<PredictionResponse>>(endpoint, 
+                var response = await GetAsync<ApiResponse<PredictionResponse>>(endpoint, 
                     new Dictionary<string, string>
                     {
                         { "userId", userId },
                         { "fixtureId", fixtureId }
-                    });;
+                    });
+                return response;
             }
             catch (Exception ex)
             {

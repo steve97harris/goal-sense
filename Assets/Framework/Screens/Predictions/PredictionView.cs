@@ -63,15 +63,9 @@ namespace Framework.Screens
         private async void SubmitPrediction()
         {
             if (string.IsNullOrEmpty(homeScoreInput.text))
-            {
-                Debug.LogError("Failed to submit, home score null");
                 return;
-            }
             if (string.IsNullOrEmpty(awayScoreInput.text))
-            {
-                Debug.LogError("Failed to submit, away score null");
                 return;
-            }
             var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
             var fixtureId = Fixture.Id.ToString();
             var existingPredictionResponse = await PredictionsService.GetPredictionAsync(userId, fixtureId);
@@ -106,7 +100,7 @@ namespace Framework.Screens
         {
             homeScoreInput.interactable = !_isLocked;
             awayScoreInput.interactable = !_isLocked;
-            lockIcon.gameObject.SetActive(_isLocked);
+            lockIcon.gameObject.SetActive(!_isLocked);
         }
     }
 }

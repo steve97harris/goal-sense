@@ -2,9 +2,10 @@
 using UnityEngine;
 namespace Framework.Screens
 {
-    public class Screen : MonoBehaviour
+    public abstract class Screen : MonoBehaviour
     {
-        public ScreenName screenName;
+        public abstract ScreenName screenName { get; }
+        public abstract ScreenViewport screenViewport { get; }
         protected static StateMachine stateMachine => StateMachine.Instance;
     }
 }

@@ -26,6 +26,7 @@ namespace Framework.Services
             public string token { get; set; }
             public string userId { get; set; }
             public string email { get; set; }
+            public string userFullName { get; set; }
         }
         
         // GET request method

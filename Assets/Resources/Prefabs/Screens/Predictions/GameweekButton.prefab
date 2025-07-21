@@ -39,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 129.2557, y: 0}
+  m_SizeDelta: {x: 129.2557, y: 104.42}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &8251182753267954574
 CanvasRenderer:
@@ -137,6 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 3094514581352004996}
   button: {fileID: 6532618760445030867}
+  underline: {fileID: 3038981817072657320}
 --- !u!1 &2116128033019269034
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,8 +307,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 16

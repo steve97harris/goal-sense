@@ -10,6 +10,7 @@ namespace Framework.Screens
         
         public TMP_Text text;
         public Button button;
+        public Image underline;
         
         private static PredictionsScreen _predictionsScreen => PredictionsScreen.Instance;
 
@@ -21,6 +22,7 @@ namespace Framework.Screens
         private void OnClick()
         {
             _predictionsScreen.EnableGameweekFixtures(gameweek);
+            _predictionsScreen.SetGameweekButtonsView(this);
         }
     }
 }
