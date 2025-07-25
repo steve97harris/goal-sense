@@ -21,12 +21,31 @@ namespace Framework.Services
             public int AwayScore { get; set; }
             public string Location { get; set; }
         }
+
+        public static async Task<List<Fixture>> GetFixturesAsync(string dateFrom, string dateTo)
+        {
+            try
+            {
+                const string endpoint = "fixtures";
+                return await GetAsync<List<Fixture>>(endpoint, 
+                    new Dictionary<string, string>
+                    {
+                        { "dateFrom", dateFrom },
+                        { "dateTo", dateTo }
+                    });
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex.Message);
+                return new List<Fixture>();
+            }
+        }
         
         public static async Task<List<Fixture>> GetPremierLeagueFixturesAsync()
         {
             try
             {
-                const string endpoint = "fixtures/get-fixtures";
+                const string endpoint = "fixtures/season-fixtures";
                 const string premierLeagueId = "2021";
                 return await GetAsync<List<Fixture>>(endpoint, 
                     new Dictionary<string, string>

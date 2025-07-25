@@ -10,7 +10,7 @@ namespace Framework.Services
 {
     public class ApiService
     {
-        private const string BASE_URL = "http://localhost:5007";
+        private const string BASE_URL = "https://goal-sense-api.onrender.com";
 
         [Serializable]
         public class ApiResponse<T>

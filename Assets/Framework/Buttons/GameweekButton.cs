@@ -6,7 +6,7 @@ namespace Framework.Screens
 {
     public class GameweekButton : MonoBehaviour
     {
-        public string gameweek { get; set; }
+        public string Gameweek { get; set; }
         
         public TMP_Text text;
         public Button button;
@@ -21,7 +21,7 @@ namespace Framework.Screens
 
         private void OnClick()
         {
-            _predictionsScreen.EnableGameweekFixtures(gameweek);
+            _predictionsScreen.EnableGameweekFixtures(Gameweek);
             _predictionsScreen.SetGameweekButtonsView(this);
         }
     }

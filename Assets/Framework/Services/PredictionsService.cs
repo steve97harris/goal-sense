@@ -15,23 +15,25 @@ namespace Framework.Services
             public int AwayScore { get; set; }
         }
         [Serializable]
-        public class PredictionResponse
+        public class Prediction
         {
             public Guid Id { get; set; }
-            public Guid FixtureId { get; set; }
             public Guid UserId { get; set; }
-            public int HomeScore { get; set; }
-            public int AwayScore { get; set; }
+            public Guid FixtureId { get; set; }
+            public int PredictedHomeScore { get; set; }
+            public int PredictedAwayScore { get; set; }
+            public int PointsAwarded { get; set; }
             public DateTime SubmittedAt { get; set; }
+            public bool IsProcessed { get; set; }
         }
 
-        public static async Task<ApiResponse<PredictionResponse>> GetPredictionAsync(string userId, string fixtureId)
+        public static async Task<ApiResponse<Prediction>> GetPredictionAsync(string userId, string fixtureId)
         {
             try
             {
                 const string endpoint = "predictions/get-prediction";
 
-                var response = await GetAsync<ApiResponse<PredictionResponse>>(endpoint, 
+                var response = await GetAsync<ApiResponse<Prediction>>(endpoint, 
                     new Dictionary<string, string>
                     {
                         { "userId", userId },
@@ -42,17 +44,17 @@ namespace Framework.Services
             catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
-                return new ApiResponse<PredictionResponse> { success = false, message = ex.Message };
+                return new ApiResponse<Prediction> { success = false, message = ex.Message };
             }
         }
         
-        public static async Task<ApiResponse<List<PredictionResponse>>> GetPredictionsAsync(string userId)
+        public static async Task<ApiResponse<List<Prediction>>> GetPredictionsAsync(string userId)
         {
             try
             {
                 const string endpoint = "predictions/get-predictions";
 
-                return await GetAsync<ApiResponse<List<PredictionResponse>>>(endpoint, 
+                return await GetAsync<ApiResponse<List<Prediction>>>(endpoint, 
                     new Dictionary<string, string>
                     {
                         { "userId", userId }
@@ -61,11 +63,11 @@ namespace Framework.Services
             catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
-                return new ApiResponse<List<PredictionResponse>> { success = false, message = ex.Message };
+                return new ApiResponse<List<Prediction>> { success = false, message = ex.Message };
             }
         }
 
-        public static async Task<ApiResponse<PredictionResponse>> SubmitPredictionAsync(string userId, 
+        public static async Task<ApiResponse<Prediction>> SubmitPredictionAsync(string userId, 
             string fixtureId, int homeScore, int awayScore)
         {
             try
@@ -81,16 +83,16 @@ namespace Framework.Services
                     AwayScore = awayScore
                 };
                 
-                return await PostAsync<PredictionRequest, ApiResponse<PredictionResponse>>(endpoint, requestData);;
+                return await PostAsync<PredictionRequest, ApiResponse<Prediction>>(endpoint, requestData);;
             }
             catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
-                return new ApiResponse<PredictionResponse> { success = false, message = ex.Message };
+                return new ApiResponse<Prediction> { success = false, message = ex.Message };
             }
         }
         
-        public static async Task<ApiResponse<PredictionResponse>> UpdatePredictionAsync(string userId, 
+        public static async Task<ApiResponse<Prediction>> UpdatePredictionAsync(string userId, 
             string fixtureId, int homeScore, int awayScore)
         {
             try
@@ -106,12 +108,12 @@ namespace Framework.Services
                     AwayScore = awayScore
                 };
                 
-                return await PostAsync<PredictionRequest, ApiResponse<PredictionResponse>>(endpoint, requestData);;
+                return await PostAsync<PredictionRequest, ApiResponse<Prediction>>(endpoint, requestData);;
             }
             catch (Exception ex)
             {
                 Debug.LogError(ex.Message);
-                return new ApiResponse<PredictionResponse> { success = false, message = ex.Message };
+                return new ApiResponse<Prediction> { success = false, message = ex.Message };
             }
         }
     }

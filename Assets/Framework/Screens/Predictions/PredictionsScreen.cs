@@ -51,7 +51,7 @@ namespace Framework.Screens
         private async void Initialize()
         {
             Debug.Log("Initialize predictions screen");
-            var existingPredictions = new List<PredictionsService.PredictionResponse>();
+            var existingPredictions = new List<PredictionsService.Prediction>();
             var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
             if (string.IsNullOrEmpty(userId))
             {
@@ -72,14 +72,14 @@ namespace Framework.Screens
 
         private void TriggerGameweekButton(string gameweek)
         {
-            var gameweekButton = _gameweekButtons.FirstOrDefault(x => x.gameweek == gameweek);
+            var gameweekButton = _gameweekButtons.FirstOrDefault(x => x.Gameweek == gameweek);
             if (gameweekButton == null)
                 return;
             gameweekButton.button.onClick.Invoke();
         }
 
         private void LoadMatchesForPredictions(List<FixturesService.Fixture> premierLeagueFixtures,
-            List<PredictionsService.PredictionResponse> existingPredictions, DateTime dateTimeNowGmt)
+            List<PredictionsService.Prediction> existingPredictions, DateTime dateTimeNowGmt)
         {
             foreach (Transform child in _predictionsContent)
                 Destroy(child.gameObject);
@@ -97,8 +97,8 @@ namespace Framework.Screens
                 var existingPrediction = existingPredictions.FirstOrDefault(x => x.FixtureId == fixture.Id);
                 if (existingPrediction != default)
                 {
-                    predictionPanel.homeScoreInput.text = existingPrediction.HomeScore.ToString();
-                    predictionPanel.awayScoreInput.text = existingPrediction.AwayScore.ToString();
+                    predictionPanel.homeScoreInput.text = existingPrediction.PredictedHomeScore.ToString();
+                    predictionPanel.awayScoreInput.text = existingPrediction.PredictedAwayScore.ToString();
                 }
                 
                 // lock prediction if game started
@@ -116,7 +116,7 @@ namespace Framework.Screens
             foreach (var gameweekNumber in gameweeks)
             {
                 var gameweekBtn = Instantiate(_gameweekButton, _gameweeksContent);
-                gameweekBtn.gameweek = gameweekNumber;
+                gameweekBtn.Gameweek = gameweekNumber;
                 gameweekBtn.text.text = $"Gameweek {gameweekNumber}";
                 _gameweekButtons.Add(gameweekBtn);
             }
