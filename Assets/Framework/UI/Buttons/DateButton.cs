@@ -12,7 +12,7 @@ namespace Framework.Screens
         public Button button;
         public Image underline;
         
-        private static HomeScreen HomeScreen => HomeScreen.Instance;
+        private static HomeScreen HomeScreen => HomeScreen.instance;
         
         private void Awake()
         {

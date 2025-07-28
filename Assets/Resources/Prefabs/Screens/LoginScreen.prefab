@@ -180,7 +180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4382730818433298105, guid: d636e17e837466b4a96699e4252f3a96, type: 3}
       propertyPath: m_fontSize
-      value: 24.25
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 4382730818433298105, guid: d636e17e837466b4a96699e4252f3a96, type: 3}
       propertyPath: m_fontStyle
@@ -216,7 +216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5210575048200481381, guid: d636e17e837466b4a96699e4252f3a96, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 32
+      value: 37.4041
       objectReference: {fileID: 0}
     - target: {fileID: 5210575048200481381, guid: d636e17e837466b4a96699e4252f3a96, type: 3}
       propertyPath: m_LocalPosition.x
@@ -252,7 +252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5210575048200481381, guid: d636e17e837466b4a96699e4252f3a96, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 76
+      value: 71
       objectReference: {fileID: 0}
     - target: {fileID: 5210575048200481381, guid: d636e17e837466b4a96699e4252f3a96, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -639,11 +639,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5987640832259413668, guid: 022719cd66fa46e419144617992f01c7, type: 3}
       propertyPath: m_fontColor.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5987640832259413668, guid: 022719cd66fa46e419144617992f01c7, type: 3}
       propertyPath: m_fontColor.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5987640832259413668, guid: 022719cd66fa46e419144617992f01c7, type: 3}
       propertyPath: m_fontColor.r
@@ -891,9 +891,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: TmpText
       objectReference: {fileID: 0}
+    - target: {fileID: 6661631818688668520, guid: 908adcb49116d7f43a84d9bb6e451a84, type: 3}
+      propertyPath: style
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8457737214283878532, guid: 908adcb49116d7f43a84d9bb6e451a84, type: 3}
       propertyPath: m_text
       value: Welcome, please enter your login details or create an account
+      objectReference: {fileID: 0}
+    - target: {fileID: 8457737214283878532, guid: 908adcb49116d7f43a84d9bb6e451a84, type: 3}
+      propertyPath: m_fontSize
+      value: 54
+      objectReference: {fileID: 0}
+    - target: {fileID: 8457737214283878532, guid: 908adcb49116d7f43a84d9bb6e451a84, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8457737214283878532, guid: 908adcb49116d7f43a84d9bb6e451a84, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 54
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -12,7 +12,7 @@ namespace Framework.Screens
         public Button button;
         public Image underline;
         
-        private static PredictionsScreen PredictionsScreen => PredictionsScreen.Instance;
+        private static PredictionsScreen PredictionsScreen => PredictionsScreen.instance;
 
         private void Awake()
         {

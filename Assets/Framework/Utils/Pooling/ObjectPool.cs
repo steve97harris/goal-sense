@@ -5,10 +5,10 @@ namespace Framework.Services
 {
     public class ObjectPool<T> where T : Component
     {
-        private T _prefab;
-        private Transform _parent;
-        private Queue<T> _pool;
-        private List<T> _activeObjects;
+        private readonly T _prefab;
+        private readonly Transform _parent;
+        private readonly Queue<T> _pool;
+        private readonly List<T> _activeObjects;
 
         public ObjectPool(T prefab, Transform parent, int initialSize)
         {
@@ -19,9 +19,7 @@ namespace Framework.Services
 
             // Create initial pool
             for (int i = 0; i < initialSize; i++)
-            {
                 CreateNewObject();
-            }
         }
 
         private void CreateNewObject()
@@ -34,9 +32,7 @@ namespace Framework.Services
         public T Get()
         {
             if (_pool.Count == 0)
-            {
                 CreateNewObject();
-            }
 
             T obj = _pool.Dequeue();
             obj.gameObject.SetActive(true);

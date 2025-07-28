@@ -12,7 +12,7 @@ namespace Framework.Screens
         public override ScreenName screenName => ScreenName.PredictionsScreen;
         public override ScreenViewport screenViewport => ScreenViewport.MainView;
         
-        public static PredictionsScreen Instance;
+        public static PredictionsScreen instance;
         
         [SerializeField] private GameweekButton gameweekButton;
         [SerializeField] private PredictionCard predictionCard;
@@ -30,8 +30,8 @@ namespace Framework.Screens
 
         private void Awake()
         {
-            if (Instance == null)
-                Instance = this;
+            if (instance == null)
+                instance = this;
             else 
                 Destroy(this.gameObject);
 
@@ -39,12 +39,6 @@ namespace Framework.Screens
             _gameweekButtonPool = new ObjectPool<GameweekButton>(gameweekButton, gameweeksContent, 38);
             
             Initialize();
-        }
-
-        private void Start()
-        {
-            LoadGameweekButtons();
-            TriggerGameweekButton(_currentGameweek);
         }
 
         private void OnApplicationQuit()
@@ -56,6 +50,7 @@ namespace Framework.Screens
         private async void Initialize()
         {
             Debug.Log("Initialize predictions screen");
+            
             var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
             if (string.IsNullOrEmpty(userId))
             {
@@ -74,14 +69,17 @@ namespace Framework.Screens
             _premierLeagueFixtures = premierLeagueFixturesResponse.data!;
             _currentGameweek = GetCurrentGameweek(premierLeagueFixturesResponse.data, dateTimeNowGmt);
             _gameweeks = premierLeagueFixturesResponse.data!.Select(x => x.Matchweek).Distinct().OrderBy(int.Parse).ToList();
+            
+            LoadGameweekButtons();
+            TriggerGameweekButton(_currentGameweek);
         }
 
         private void TriggerGameweekButton(string gameweek)
         {
-            var gameweekButton = _gameweekButtons.FirstOrDefault(x => x.Gameweek == gameweek);
-            if (gameweekButton == null)
+            var gameweekButtonObj = _gameweekButtons.FirstOrDefault(x => x.Gameweek == gameweek);
+            if (gameweekButtonObj == null)
                 return;
-            gameweekButton.button.onClick.Invoke();
+            gameweekButtonObj.button.onClick.Invoke();
         }
 
         public void LoadGameweekMatches(string gameweek)
@@ -91,7 +89,8 @@ namespace Framework.Screens
 
             _predictionCards = new List<PredictionCard>();
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
-            var fixtures = _premierLeagueFixtures.Where(x => x.Matchweek == gameweek);
+            var fixtures = _premierLeagueFixtures.Where(x => x.Matchweek == gameweek).ToList();
+            
             foreach (var fixture in fixtures)
             {
                 var prediction = _predictionCardPool.Get();
@@ -105,14 +104,14 @@ namespace Framework.Screens
                 
                 // set prediction if already submitted
                 var existingPrediction = _existingPredictions.FirstOrDefault(x => x.FixtureId == fixture.Id);
-                if (existingPrediction != default)
-                {
-                    prediction.homeScoreInput.text = existingPrediction.PredictedHomeScore.ToString();
-                    prediction.awayScoreInput.text = existingPrediction.PredictedAwayScore.ToString();
-                }
+                prediction.homeScoreInput.text = existingPrediction != default ? 
+                    existingPrediction.PredictedHomeScore.ToString() : "";
+                prediction.awayScoreInput.text = existingPrediction != default ? 
+                    existingPrediction.PredictedAwayScore.ToString() : "";
                 
                 // lock prediction if game started
                 prediction.Locked = dateTimeNowGmt >= fixture.Kickoff;
+                prediction.gameObject.SetActive(true);
                 _predictionCards.Add(prediction);
             }
         }
@@ -128,6 +127,7 @@ namespace Framework.Screens
                 var gameweekBtn = _gameweekButtonPool.Get();
                 gameweekBtn.Gameweek = gameweekNumber;
                 gameweekBtn.text.text = $"Gameweek {gameweekNumber}";
+                gameweekBtn.gameObject.SetActive(true);
                 _gameweekButtons.Add(gameweekBtn);
             }
         }

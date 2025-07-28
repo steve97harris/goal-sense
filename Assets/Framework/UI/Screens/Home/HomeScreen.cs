@@ -15,7 +15,7 @@ namespace Framework.Screens
         public override ScreenName screenName => ScreenName.HomeScreen;
         public override ScreenViewport screenViewport => ScreenViewport.MainView;
         
-        public static HomeScreen Instance;
+        public static HomeScreen instance;
         
         [SerializeField] private DateButton dateButton;
         [SerializeField] private MatchCard matchCard;
@@ -27,8 +27,8 @@ namespace Framework.Screens
 
         private void Awake()
         {
-            if (Instance == null)
-                Instance = this;
+            if (instance == null)
+                instance = this;
             else 
                 Destroy(this.gameObject);
             Initialize();
@@ -85,7 +85,7 @@ namespace Framework.Screens
                 matchCardObj.dateTime.text = fixture.Kickoff.ToString("dd/MM/yyyy");
                 
                 if (fixture.Status is "TIMED" or "SCHEDULED")
-                    matchCardObj.result.text = fixture.Kickoff.ToString("t", new CultureInfo("en-US"));
+                    matchCardObj.result.text = fixture.Kickoff.ToString("t", new CultureInfo("en-US")).ToLower();
                 else
                     matchCardObj.result.text = $"{fixture.HomeScore} : {fixture.AwayScore}";
                 
