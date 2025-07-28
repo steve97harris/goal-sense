@@ -34,12 +34,6 @@ namespace Framework.Screens
             Initialize();
         }
 
-        private void Start()
-        {
-            if (!string.IsNullOrEmpty(_currentGameweek))
-                TriggerGameweekButton(_currentGameweek);
-        }
-
         private void OnApplicationQuit()
         {
             foreach (Transform child in _predictionsContent)
@@ -63,11 +57,14 @@ namespace Framework.Screens
                 existingPredictions = response.data;
 
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
-            var premierLeagueFixtures = await FixturesService.GetPremierLeagueFixturesAsync();
-            _currentGameweek = GetCurrentGameweek(premierLeagueFixtures, dateTimeNowGmt);
-            var gameweeks = premierLeagueFixtures.Select(x => x.Matchweek).Distinct().OrderBy(int.Parse).ToList();
+            var premierLeagueFixturesResponse = await FixturesService.GetPremierLeagueFixturesAsync();
+            if (!premierLeagueFixturesResponse.success)
+                return;
+            _currentGameweek = GetCurrentGameweek(premierLeagueFixturesResponse.data, dateTimeNowGmt);
+            var gameweeks = premierLeagueFixturesResponse.data!.Select(x => x.Matchweek).Distinct().OrderBy(int.Parse).ToList();
             LoadGameweekButtons(gameweeks);
-            LoadMatchesForPredictions(premierLeagueFixtures, existingPredictions, dateTimeNowGmt);
+            LoadMatchesForPredictions(premierLeagueFixturesResponse.data, existingPredictions, dateTimeNowGmt); 
+            TriggerGameweekButton(_currentGameweek);
         }
 
         private void TriggerGameweekButton(string gameweek)
@@ -92,6 +89,9 @@ namespace Framework.Screens
                 predictionPanel.homeTeam.text = fixture.HomeTeam;
                 predictionPanel.awayTeam.text = fixture.AwayTeam;
                 predictionPanel.dateTime.text = fixture.Kickoff.ToString("HH:mm dd/MM/yyyy");
+                
+                ImageLoaderService.LoadImageToRawImage(fixture.HomeTeamLogo, predictionPanel.homeTeamLogo);
+                ImageLoaderService.LoadImageToRawImage(fixture.AwayTeamLogo, predictionPanel.awayTeamLogo);
                 
                 // set prediction if already submitted
                 var existingPrediction = existingPredictions.FirstOrDefault(x => x.FixtureId == fixture.Id);

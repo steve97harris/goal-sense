@@ -41,9 +41,16 @@ namespace Framework.Screens
             _predictionsButton.button.onClick.AddListener(() => NavigateToScreen(_predictionsButton, ScreenName.PredictionsScreen));
             _miniLeaguesButton.button.onClick.AddListener(() => NavigateToScreen(_miniLeaguesButton, ScreenName.MiniLeaguesScreen));
             _profileButton.button.onClick.AddListener(() => NavigateToProfile(_profileButton));
+            SetButtonColours(_homeButton);
         }
         
         private void NavigateToScreen(ScreenNavigatorButton buttonClicked, ScreenName screenName)
+        {
+            SetButtonColours(buttonClicked);
+            _stateMachine.ChangeState(screenName);
+        }
+
+        private void SetButtonColours(ScreenNavigatorButton buttonClicked)
         {
             foreach (var button in _buttons)
             {
@@ -52,7 +59,6 @@ namespace Framework.Screens
             }
             buttonClicked.icon.color = _selectedColour;  
             buttonClicked.tmpText.color = _selectedColour;
-            _stateMachine.ChangeState(screenName);
         }
 
         private void NavigateToProfile(ScreenNavigatorButton button)

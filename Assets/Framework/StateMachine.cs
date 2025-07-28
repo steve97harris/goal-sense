@@ -2,6 +2,7 @@
 using Framework.Screens;
 using System;
 using System.Collections.Generic;
+using Framework.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Screen = Framework.Screens.Screen;
@@ -52,8 +53,17 @@ namespace Framework
                 ScreenName.HomeScreen : ScreenName.FirstLoadScreen);
         }
 
+        private void OnDestroy()
+        {
+            ImageLoaderService.ClearCache();
+        }
+
         public void ChangeState(ScreenName screenName)
         {
+            if (_currentScreen != null && 
+                _currentScreen.screenName == screenName)
+                return;
+            
             if (_currentScreen != null)
             {
                 _previousScreen = _currentScreen;

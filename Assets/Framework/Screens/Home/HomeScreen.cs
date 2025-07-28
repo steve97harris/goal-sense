@@ -2,6 +2,7 @@
 using Framework.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -33,11 +34,6 @@ namespace Framework.Screens
             Initialize();
         }
 
-        private void Start()
-        {
-            TriggerFirstMatchDayButton();
-        }
-
         private void OnApplicationQuit()
         {
             foreach (Transform child in _matchesContent)
@@ -51,15 +47,22 @@ namespace Framework.Screens
             Debug.Log("Initialize home screen");
             
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
+            var yesterdayGmt = dateTimeNowGmt.AddDays(-1);
             var dateTimeNowPlus2Days = dateTimeNowGmt.AddDays(2);
-            var fixtures = await FixturesService.GetFixturesAsync(dateTimeNowGmt.ToString("yyyy-MM-dd"), dateTimeNowPlus2Days.ToString("yyyy-MM-dd"));
-            // LoadDateButtons();
-            LoadMatches(fixtures);
+            var fixturesResponse = await FixturesService.GetFixturesAsync(yesterdayGmt.ToString("yyyy-MM-dd"), dateTimeNowPlus2Days.ToString("yyyy-MM-dd"));
+            if (!fixturesResponse.success)
+                return;
+            var dates = Enumerable.Range(-1, 4)
+                .Select(offset => dateTimeNowGmt.AddDays(offset))
+                .ToList();
+            LoadDateButtons(dates);
+            LoadMatches(fixturesResponse.data);
+            TriggerDateButton(dateTimeNowGmt);
         }
 
-        private void TriggerFirstMatchDayButton()
+        private void TriggerDateButton(DateTime date)
         {
-            var gameweekButton = _matchDayButtons.FirstOrDefault();
+            var gameweekButton = _matchDayButtons.FirstOrDefault(x => x.DateTime.Date == date.Date);
             if (gameweekButton == null)
                 return;
             gameweekButton.button.onClick.Invoke();
@@ -74,10 +77,20 @@ namespace Framework.Screens
             foreach (var fixture in fixtures)
             {
                 var matchView = Instantiate(this._matchView, _matchesContent);
+                
                 matchView.Fixture = fixture;
+                
                 matchView.homeTeam.text = fixture.HomeTeam;
                 matchView.awayTeam.text = fixture.AwayTeam;
-                matchView.dateTime.text = fixture.Kickoff.ToString("HH:mm dd/MM/yyyy");
+                matchView.dateTime.text = fixture.Kickoff.ToString("dd/MM/yyyy");
+                
+                if (fixture.Status is "TIMED" or "SCHEDULED")
+                    matchView.result.text = fixture.Kickoff.ToString("t", new CultureInfo("en-US"));
+                else
+                    matchView.result.text = $"{fixture.HomeScore} : {fixture.AwayScore}";
+                
+                ImageLoaderService.LoadImageToRawImage(fixture.HomeTeamLogo, matchView.homeTeamLogo);
+                ImageLoaderService.LoadImageToRawImage(fixture.AwayTeamLogo, matchView.awayTeamLogo);
                 
                 _matches.Add(matchView);
             }
@@ -89,11 +102,15 @@ namespace Framework.Screens
                 Destroy(child.gameObject);
 
             _matchDayButtons = new List<DateButton>();
+            var todaysDate = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow).Date;
             foreach (var date in dates)
             {
                 var btn = Instantiate(_dateButton, _datesContent);
-                btn.Date = date;
-                btn.text.text = $"{date}";
+                btn.DateTime = date;
+                var dateDisplay = date.Date.ToString("d MMM");
+                if (date.Date == todaysDate)
+                    dateDisplay = "Today";
+                btn.text.text = dateDisplay;
                 _matchDayButtons.Add(btn);
             }
         }

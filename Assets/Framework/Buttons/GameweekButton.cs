@@ -12,7 +12,7 @@ namespace Framework.Screens
         public Button button;
         public Image underline;
         
-        private static PredictionsScreen _predictionsScreen => PredictionsScreen.Instance;
+        private static PredictionsScreen PredictionsScreen => PredictionsScreen.Instance;
 
         private void Awake()
         {
@@ -21,8 +21,8 @@ namespace Framework.Screens
 
         private void OnClick()
         {
-            _predictionsScreen.EnableGameweekFixtures(Gameweek);
-            _predictionsScreen.SetGameweekButtonsView(this);
+            PredictionsScreen.EnableGameweekFixtures(Gameweek);
+            PredictionsScreen.SetGameweekButtonsView(this);
         }
     }
 }

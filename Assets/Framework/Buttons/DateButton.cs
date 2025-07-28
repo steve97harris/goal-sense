@@ -6,11 +6,13 @@ namespace Framework.Screens
 {
     public class DateButton : MonoBehaviour
     {
-        public DateTime Date { get; set; }
+        public DateTime DateTime { get; set; }
         
         public TMP_Text text;
         public Button button;
         public Image underline;
+        
+        private static HomeScreen HomeScreen => HomeScreen.Instance;
         
         private void Awake()
         {
@@ -19,7 +21,8 @@ namespace Framework.Screens
 
         private void OnClick()
         {
-            // TODO
+            HomeScreen.EnableMatchesByDate(DateTime);
+            HomeScreen.SetDateButtonsView(this);
         }
     }
 }

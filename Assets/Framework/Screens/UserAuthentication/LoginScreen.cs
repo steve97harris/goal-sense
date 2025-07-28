@@ -34,6 +34,7 @@ namespace Framework.Screens
                     Debug.Log($"Login successful! Token: {response.data.token}");
                     PlayerPrefs.SetString(PlayerPrefsKeys.JWT_TOKEN, response.data.token);
                     PlayerPrefs.SetString(PlayerPrefsKeys.USER_ID, response.data.userId);
+                    stateMachine.ChangeState(ScreenName.HomeScreen);
                 }
                 else
                 {

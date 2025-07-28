@@ -1,5 +1,95 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6359469517023429794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2901554962956606866}
+  - component: {fileID: 5557879891098594562}
+  - component: {fileID: 7952811539458158561}
+  - component: {fileID: 4914166169272206230}
+  m_Layer: 5
+  m_Name: Cuti
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2901554962956606866
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359469517023429794}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9144383081312339600}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 938.48}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5557879891098594562
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359469517023429794}
+  m_CullTransparentMesh: 1
+--- !u!114 &7952811539458158561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359469517023429794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0bcb188ab35d92b42b56d37dd440465f, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4914166169272206230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6359469517023429794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 1
+  m_AspectRatio: 0.6872783
 --- !u!1 &6703820868419478052
 GameObject:
   m_ObjectHideFlags: 0
@@ -31,6 +121,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2901554962956606866}
   - {fileID: 5038843177267764477}
   - {fileID: 1638924011715978973}
   m_Father: {fileID: 0}
@@ -90,7 +181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e4f5441d0a4a7b8aa5e24912cfedb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenName: 6
   _loginButton: {fileID: 3464196311107963561}
   _registerButton: {fileID: 7151854370585145481}
 --- !u!1001 &982417257868228248
@@ -171,7 +261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5210575048200481381, guid: 754578eb8b3603241a32f91e108e2db3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -499
+      value: -1014
       objectReference: {fileID: 0}
     - target: {fileID: 5210575048200481381, guid: 754578eb8b3603241a32f91e108e2db3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -284,7 +374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5210575048200481381, guid: 98aa9f16bd839504c9709b523936fabb, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -675
+      value: -1190
       objectReference: {fileID: 0}
     - target: {fileID: 5210575048200481381, guid: 98aa9f16bd839504c9709b523936fabb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
