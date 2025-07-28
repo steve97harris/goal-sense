@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace Framework.Screens
 {
-    public class MatchView : MonoBehaviour
+    public class MatchCard : MonoBehaviour
     {
         public TMP_Text dateTime;
         public TMP_Text result;

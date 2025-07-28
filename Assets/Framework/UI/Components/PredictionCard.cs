@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace Framework.Screens
 {
-    public class PredictionView : MonoBehaviour
+    public class PredictionCard : MonoBehaviour
     {
         public Image lockIcon;
         public TMP_Text dateTime;
@@ -19,7 +19,7 @@ namespace Framework.Screens
         public TMP_InputField awayScoreInput;
         public Button editButton;
         public Button submitButton;
-
+        
         public FixturesService.Fixture Fixture { get; set; }
         public bool Locked
         {
@@ -98,9 +98,8 @@ namespace Framework.Screens
         
         private void UpdateLockState()
         {
-            homeScoreInput.interactable = !_isLocked;
-            awayScoreInput.interactable = !_isLocked;
-            lockIcon.gameObject.SetActive(!_isLocked);
+            editButton.gameObject.SetActive(!_isLocked);
+            lockIcon.gameObject.SetActive(_isLocked);
         }
     }
 }

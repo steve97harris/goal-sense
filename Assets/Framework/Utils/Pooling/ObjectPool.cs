@@ -1,0 +1,62 @@
+﻿using UnityEngine;
+using System.Collections.Generic;
+
+namespace Framework.Services
+{
+    public class ObjectPool<T> where T : Component
+    {
+        private T _prefab;
+        private Transform _parent;
+        private Queue<T> _pool;
+        private List<T> _activeObjects;
+
+        public ObjectPool(T prefab, Transform parent, int initialSize)
+        {
+            _prefab = prefab;
+            _parent = parent;
+            _pool = new Queue<T>();
+            _activeObjects = new List<T>();
+
+            // Create initial pool
+            for (int i = 0; i < initialSize; i++)
+            {
+                CreateNewObject();
+            }
+        }
+
+        private void CreateNewObject()
+        {
+            T obj = Object.Instantiate(_prefab, _parent);
+            obj.gameObject.SetActive(false);
+            _pool.Enqueue(obj);
+        }
+
+        public T Get()
+        {
+            if (_pool.Count == 0)
+            {
+                CreateNewObject();
+            }
+
+            T obj = _pool.Dequeue();
+            obj.gameObject.SetActive(true);
+            _activeObjects.Add(obj);
+            return obj;
+        }
+
+        public void Return(T obj)
+        {
+            obj.gameObject.SetActive(false);
+            _pool.Enqueue(obj);
+            _activeObjects.Remove(obj);
+        }
+
+        public void ReturnAll()
+        {
+            foreach (var obj in _activeObjects.ToArray())
+            {
+                Return(obj);
+            }
+        }
+    }
+}

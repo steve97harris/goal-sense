@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 1550267226389262130}
   - component: {fileID: 4782005443745022574}
   m_Layer: 0
-  m_Name: MatchView
+  m_Name: MatchCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

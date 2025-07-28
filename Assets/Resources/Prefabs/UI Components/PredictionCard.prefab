@@ -325,11 +325,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2409666051112051474}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 40, y: 40}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 32}
+  m_SizeDelta: {x: 38, y: 38}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &8874281192441533134
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 1550267226389262130}
   - component: {fileID: 6859348552249460684}
   m_Layer: 0
-  m_Name: PredictionView
+  m_Name: PredictionCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1098,6 +1098,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3234944268660146204, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
+      propertyPath: m_isRichText
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3234944268660146204, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5469028168513708649, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
       propertyPath: m_Name
       value: Score-InputField (TMP)
@@ -1264,6 +1272,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2855310404426547611}
     m_Modifications:
+    - target: {fileID: 1596234850468099914, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2409818446592594806, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -1345,6 +1357,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3234944268660146204, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
+      propertyPath: m_text
+      value: "\u200B"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3234944268660146204, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
+      propertyPath: m_isRichText
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3234944268660146204, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
       propertyPath: m_TextWrappingMode
       value: 3
       objectReference: {fileID: 0}
@@ -1352,6 +1372,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Score-InputField (TMP)
       objectReference: {fileID: 0}
+    - target: {fileID: 5670790828841349052, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5670790828841349052, guid: 2f39ddec862c2ce4ab0c369e56bf9156, type: 3}
+      propertyPath: m_GlobalFontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: cb23e52907d69d949bb3a329a2d75dbc, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
