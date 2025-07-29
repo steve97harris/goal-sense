@@ -72,7 +72,7 @@ namespace Framework.UI.StyleSystem
                     text.color = SecondaryTextColor;
                     break;
                 case TextStyle.FontOnly:
-                    text.font = PrimaryFont;
+                    text.font = SecondaryFont;
                     break;
             }
         }

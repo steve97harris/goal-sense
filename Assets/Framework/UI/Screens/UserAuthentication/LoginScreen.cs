@@ -39,7 +39,7 @@ namespace Framework.Screens
                 else
                 {
                     Debug.LogError($"Login failed: {response.message}");
-                    _errorText.text = $"Login failed: {response.message}";
+                    _errorText.text = $"*Login failed.\n{response.message}";
                     _errorText.gameObject.SetActive(true);
                 }
             }

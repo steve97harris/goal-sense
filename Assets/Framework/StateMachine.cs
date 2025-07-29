@@ -16,7 +16,9 @@ namespace Framework
         RegisterScreen,
         ProfileScreen,
         MiniLeaguesScreen,
-        FirstLoadScreen
+        FirstLoadScreen,
+        CreateMiniLeagueScreen,
+        JoinMiniLeagueScreen
     }
     public enum ScreenViewport
     {

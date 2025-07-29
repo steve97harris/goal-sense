@@ -37,7 +37,7 @@ namespace Framework.Screens
                 _registerButton.GetComponent<CanvasGroup>().alpha = 1f;
                 return;
             }
-            _errorText.text = "Passwords do not match";
+            _errorText.text = "*Passwords do not match";
             _errorText.gameObject.SetActive(true);
             _registerButton.GetComponent<CanvasGroup>().interactable = false;
             _registerButton.GetComponent<CanvasGroup>().alpha = 0.35f;
@@ -67,6 +67,7 @@ namespace Framework.Screens
                     PlayerPrefs.SetString(PlayerPrefsKeys.JWT_TOKEN, response.data.token);
                     PlayerPrefs.SetString(PlayerPrefsKeys.USER_ID, response.data.userId);
                     PlayerPrefs.SetString(PlayerPrefsKeys.USER_FULL_NAME, response.data.userFullName);
+                    stateMachine.ChangeState(ScreenName.HomeScreen);
                 }
                 else
                 {

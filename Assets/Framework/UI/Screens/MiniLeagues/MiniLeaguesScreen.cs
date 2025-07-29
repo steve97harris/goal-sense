@@ -26,7 +26,20 @@ namespace Framework.Screens.MiniLeagues
             else
                 Destroy(gameObject);
             
+            createLeagueButton.onClick.AddListener(() => 
+                stateMachine.ChangeState(ScreenName.CreateMiniLeagueScreen));
+            joinLeagueButton.onClick.AddListener(() => 
+                stateMachine.ChangeState(ScreenName.JoinMiniLeagueScreen));
+            
             Initialize();
+        }
+
+        private void OnDestroy()
+        {
+            createLeagueButton.onClick.RemoveListener(() => 
+                stateMachine.ChangeState(ScreenName.CreateMiniLeagueScreen));
+            joinLeagueButton.onClick.RemoveListener(() => 
+                stateMachine.ChangeState(ScreenName.JoinMiniLeagueScreen));
         }
 
         private void Initialize()

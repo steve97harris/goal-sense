@@ -516,6 +516,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6661631818688668520, guid: 908adcb49116d7f43a84d9bb6e451a84, type: 3}
+      propertyPath: style
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8457737214283878532, guid: 908adcb49116d7f43a84d9bb6e451a84, type: 3}
       propertyPath: m_text
       value: Error
