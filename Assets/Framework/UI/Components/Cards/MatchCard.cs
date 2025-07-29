@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace Framework.Screens
 {
-    public class MatchCard : MonoBehaviour
+    public class MatchCard : MonoBehaviour, IPoolable
     {
         public TMP_Text dateTime;
         public TMP_Text result;
@@ -15,6 +15,17 @@ namespace Framework.Screens
         public RawImage homeTeamLogo;
         public RawImage awayTeamLogo;
 
-        public FixturesService.Fixture Fixture { get; set; }
+        public Fixture Fixture { get; set; }
+        
+        public void OnDespawn()
+        {
+            dateTime.text = string.Empty;
+            result.text = string.Empty;
+            homeTeam.text = string.Empty;
+            awayTeam.text = string.Empty;
+            homeTeamLogo.texture = null;
+            awayTeamLogo.texture = null;
+            Fixture = null;
+        }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Framework.Services;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 namespace Framework.Screens
 {
-    public class GameweekButton : MonoBehaviour
+    public class GameweekButton : MonoBehaviour, IPoolable
     {
         public string Gameweek { get; set; }
         
@@ -13,6 +14,14 @@ namespace Framework.Screens
         public Image underline;
         
         private static PredictionsScreen PredictionsScreen => PredictionsScreen.instance;
+        
+        public void OnDespawn()
+        {
+            text.text = string.Empty;
+            underline.gameObject.SetActive(false);
+            Gameweek = string.Empty;
+            button.onClick.RemoveAllListeners();
+        }
 
         private void Awake()
         {
@@ -21,7 +30,7 @@ namespace Framework.Screens
 
         private void OnClick()
         {
-            PredictionsScreen.LoadGameweekMatches(Gameweek);
+            PredictionsScreen.LoadMatchesByGameweek(Gameweek);
             PredictionsScreen.EnableGameweekFixtures(Gameweek);
             PredictionsScreen.SetGameweekButtonsView(this);
         }

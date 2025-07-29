@@ -21,6 +21,7 @@ namespace Framework.Screens
 
         private void OnClick()
         {
+            HomeScreen.LoadMatchesByDate(DateTime);
             HomeScreen.EnableMatchesByDate(DateTime);
             HomeScreen.SetDateButtonsView(this);
         }

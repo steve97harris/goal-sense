@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dateButton: {fileID: 3797041693602452053, guid: abb7f9e22c28e2f439bb525cdbd4ccfd, type: 3}
   matchCard: {fileID: 4782005443745022574, guid: be1ba74807b68a9428e9202b26426f8b, type: 3}
+  noMatchesCard: {fileID: 4067993285381661298, guid: d29ab051daf8f9d479559a122b617ba5, type: 3}
   datesContent: {fileID: 2401110954133186899}
   matchesContent: {fileID: 7316659994347220288}
 --- !u!1001 &3135339227408478411
@@ -103,6 +104,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7479634418721247346}
     m_Modifications:
+    - target: {fileID: 779267710200568216, guid: 94fdf6421e402c04483575c2b5f83f7a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3521788899788887017, guid: 94fdf6421e402c04483575c2b5f83f7a, type: 3}
       propertyPath: m_Name
       value: DateSelector

@@ -30,20 +30,20 @@ namespace Framework.UI.StyleSystem
         public Color SecondaryTextColor = Color.white;
 
         // Singleton pattern for easy access
-        private static UIStyleSystem instance;
+        private static UIStyleSystem _instance;
         public static UIStyleSystem Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = Resources.Load<UIStyleSystem>("Style/UIStyle");
-                    if (instance == null)
+                    _instance = Resources.Load<UIStyleSystem>("UIStyle");
+                    if (_instance == null)
                     {
                         Debug.LogError("UIStyle not found in Resources folder!");
                     }
                 }
-                return instance;
+                return _instance;
             }
         }
 

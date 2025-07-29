@@ -19,11 +19,15 @@ namespace Framework.Screens
         
         [SerializeField] private DateButton dateButton;
         [SerializeField] private MatchCard matchCard;
+        [SerializeField] private GameObject noMatchesCard;
         [SerializeField] private Transform datesContent;
         [SerializeField] private Transform matchesContent;
 
+        private ObjectPool<MatchCard> _matchCardPool;
         private List<MatchCard> _matches = new List<MatchCard>();
         private List<DateButton> _matchDayButtons = new List<DateButton>();
+        private List<Fixture> _fixtures = new List<Fixture>();
+        private GameObject _noMatchesCard;
 
         private void Awake()
         {
@@ -31,32 +35,37 @@ namespace Framework.Screens
                 instance = this;
             else 
                 Destroy(this.gameObject);
+            
+            _matchCardPool = new ObjectPool<MatchCard>(matchCard, matchesContent, 50);
+            
             Initialize();
         }
 
         private void OnApplicationQuit()
         {
-            foreach (Transform child in matchesContent)
-                Destroy(child.gameObject);
+            foreach (var card in _matches)
+                _matchCardPool.Return(card);
             foreach (Transform child in datesContent)
                 Destroy(child.gameObject);
         }
 
         private async void Initialize()
         {
-            Debug.Log("Initialize home screen");
-            
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
             var yesterdayGmt = dateTimeNowGmt.AddDays(-1);
             var dateTimeNowPlus2Days = dateTimeNowGmt.AddDays(2);
             var fixturesResponse = await FixturesService.GetFixturesAsync(yesterdayGmt.ToString("yyyy-MM-dd"), dateTimeNowPlus2Days.ToString("yyyy-MM-dd"));
             if (!fixturesResponse.success)
                 return;
+
+            _fixtures = fixturesResponse.data!;
+            _noMatchesCard = Instantiate(noMatchesCard, matchesContent);
+            _noMatchesCard.SetActive(false);
+            
             var dates = Enumerable.Range(-1, 4)
                 .Select(offset => dateTimeNowGmt.AddDays(offset))
                 .ToList();
             LoadDateButtons(dates);
-            LoadMatches(fixturesResponse.data);
             TriggerDateButton(dateTimeNowGmt);
         }
 
@@ -68,15 +77,17 @@ namespace Framework.Screens
             gameweekButton.button.onClick.Invoke();
         }
 
-        private void LoadMatches(List<FixturesService.Fixture> fixtures)
+        public void LoadMatchesByDate(DateTime dateTime)
         {
-            foreach (Transform child in matchesContent)
-                Destroy(child.gameObject);
+            foreach (var card in _matches)
+                _matchCardPool.Return(card);
 
             _matches = new List<MatchCard>();
-            foreach (var fixture in fixtures)
+            var fixturesByDate = _fixtures.Where(x => x.Kickoff.Date == dateTime.Date).ToList();
+            
+            foreach (var fixture in fixturesByDate)
             {
-                var matchCardObj = Instantiate(this.matchCard, matchesContent);
+                var matchCardObj = _matchCardPool.Get();
                 
                 matchCardObj.Fixture = fixture;
                 
@@ -94,6 +105,8 @@ namespace Framework.Screens
                 
                 _matches.Add(matchCardObj);
             }
+
+            _noMatchesCard.SetActive(fixturesByDate.Count == 0);
         }
 
         private void LoadDateButtons(List<DateTime> dates)

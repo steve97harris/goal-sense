@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 namespace Framework.Screens
 {
-    public class PredictionCard : MonoBehaviour
+    public class PredictionCard : MonoBehaviour, IPoolable
     {
         public Image lockIcon;
         public TMP_Text dateTime;
@@ -20,7 +20,7 @@ namespace Framework.Screens
         public Button editButton;
         public Button submitButton;
         
-        public FixturesService.Fixture Fixture { get; set; }
+        public Fixture Fixture { get; set; }
         public bool Locked
         {
             get => _isLocked;
@@ -34,6 +34,21 @@ namespace Framework.Screens
             }
         }
         private bool _isLocked;
+        
+        public void OnDespawn()
+        {
+            homeTeam.text = string.Empty;
+            awayTeam.text = string.Empty;
+            dateTime.text = string.Empty;
+            homeScoreInput.text = string.Empty;
+            awayScoreInput.text = string.Empty;
+            homeTeamLogo.texture = null;
+            awayTeamLogo.texture = null;
+            Locked = false;
+            homeScoreInput.onValueChanged.RemoveAllListeners();
+            awayScoreInput.onValueChanged.RemoveAllListeners();
+            Fixture = null;
+        }
 
         private void Start()
         {

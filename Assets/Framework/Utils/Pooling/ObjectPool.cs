@@ -34,14 +34,18 @@ namespace Framework.Services
             if (_pool.Count == 0)
                 CreateNewObject();
 
-            T obj = _pool.Dequeue();
+            var obj = _pool.Dequeue();
             obj.gameObject.SetActive(true);
             _activeObjects.Add(obj);
+            
             return obj;
         }
 
         public void Return(T obj)
         {
+            if (obj is IPoolable poolableObj)
+                poolableObj.OnDespawn();
+            
             obj.gameObject.SetActive(false);
             _pool.Enqueue(obj);
             _activeObjects.Remove(obj);
@@ -50,9 +54,7 @@ namespace Framework.Services
         public void ReturnAll()
         {
             foreach (var obj in _activeObjects.ToArray())
-            {
                 Return(obj);
-            }
         }
     }
 }

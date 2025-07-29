@@ -19,8 +19,8 @@ namespace Framework.Screens
         [SerializeField] private Transform gameweeksContent;
         [SerializeField] private Transform predictionsContent;
 
-        private List<PredictionsService.Prediction> _existingPredictions = new List<PredictionsService.Prediction>();
-        private List<FixturesService.Fixture> _premierLeagueFixtures = new List<FixturesService.Fixture>();
+        private List<Prediction> _existingPredictions = new List<Prediction>();
+        private List<Fixture> _premierLeagueFixtures = new List<Fixture>();
         private List<string> _gameweeks = new List<string>();
         private string _currentGameweek;
         private ObjectPool<PredictionCard> _predictionCardPool;
@@ -49,8 +49,6 @@ namespace Framework.Screens
 
         private async void Initialize()
         {
-            Debug.Log("Initialize predictions screen");
-            
             var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
             if (string.IsNullOrEmpty(userId))
             {
@@ -82,7 +80,7 @@ namespace Framework.Screens
             gameweekButtonObj.button.onClick.Invoke();
         }
 
-        public void LoadGameweekMatches(string gameweek)
+        public void LoadMatchesByGameweek(string gameweek)
         {
             foreach (var predictionView in _predictionCards)
                 _predictionCardPool.Return(predictionView);
@@ -145,7 +143,7 @@ namespace Framework.Screens
             gameweekButton.underline.gameObject.SetActive(true);
         }
 
-        private static string GetCurrentGameweek(List<FixturesService.Fixture> fixtures, DateTime dateTimeNowGmt)
+        private static string GetCurrentGameweek(List<Fixture> fixtures, DateTime dateTimeNowGmt)
         {
             fixtures.Sort((a, b) => a.Kickoff.CompareTo(b.Kickoff));
 
