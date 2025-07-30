@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8748ef7da162466480eab0b14146ac91, type: 3}
   m_Name: UIStyle
   m_EditorClassIdentifier: 
-  PrimaryFont: {fileID: 11400000, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
-  SecondaryFont: {fileID: 11400000, guid: 3c25ddccccfb09b44842cceabde101a1, type: 2}
+  PrimaryFont: {fileID: 11400000, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
+  SecondaryFont: {fileID: 11400000, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
   HeaderSize: 72
   SubheaderSize: 54
   BodySize: 36

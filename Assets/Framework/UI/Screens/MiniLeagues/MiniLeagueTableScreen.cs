@@ -1,6 +1,11 @@
 ﻿using Framework.Services;
 using System;
+using Framework.Extensions;
+using Framework.UI.Components;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+
 namespace Framework.Screens.MiniLeagues
 {
     public class MiniLeagueTableScreen : Screen, IScreenData
@@ -9,14 +14,20 @@ namespace Framework.Screens.MiniLeagues
         public override ScreenViewport screenViewport => ScreenViewport.MainView;
            
         public static MiniLeagueTableScreen instance;
-
+        
         private MiniLeague MiniLeague { get; set; }
-
+        
+        [SerializeField] private TMP_Text miniLeagueName;
+        [SerializeField] private MiniLeagueTableRow miniLeagueTableRow;
+        [SerializeField] private Transform miniLeagueTableContent;
+        
         public void SetScreenData(object data)
         {
             if (data is MiniLeague miniLeague)
                 MiniLeague = miniLeague;
-            LoadMiniLeague();
+            
+            miniLeagueName.text = MiniLeague.Name;
+            LoadMiniLeagueTable();
         }
         
         private void Awake()
@@ -27,15 +38,35 @@ namespace Framework.Screens.MiniLeagues
                 Destroy(this);
         }
 
-        private async void LoadMiniLeague()
+        private async void LoadMiniLeagueTable()
         {
-            var response = await MiniLeaguesService.GetMiniLeagueTable(MiniLeague.Id.ToString());
-            if (!response.success)
+            try
             {
-                Debug.LogError($"Error failed to load mini league table.\n{response.message}");
-                return;
+                var response = await MiniLeaguesService.GetMiniLeagueTable(MiniLeague.Id.ToString());
+                if (!response.success)
+                {
+                    Debug.LogError($"Error failed to load mini league table.\n{response.message}");
+                    return;
+                }
+            
+                foreach (Transform child in miniLeagueTableContent)
+                    Destroy(child.gameObject);
+
+                var miniLeagueTable = response.data!;
+                var i = 1;
+                foreach (var data in miniLeagueTable)   
+                {
+                    var row = Instantiate(miniLeagueTableRow, miniLeagueTableContent);
+                    row.playerName.text = data.UserName;
+                    row.points.text = data.TotalPoints.ToString();
+                    row.position.text = i.ToOrdinal();
+                    i++;
+                }
             }
-            // TODO load mini league table
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
     }
 }

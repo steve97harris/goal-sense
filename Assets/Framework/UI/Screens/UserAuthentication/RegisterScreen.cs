@@ -15,13 +15,11 @@ namespace Framework.Screens
         [SerializeField] private TMP_InputField _emailInput;
         [SerializeField] private TMP_InputField _passwordInput;
         [SerializeField] private TMP_InputField _confirmPasswordInput;
-        [SerializeField] private Button _backButton;
         [SerializeField] private Button _registerButton;
         [SerializeField] private TMP_Text _errorText;
 
         private void Start()
         {
-            _backButton.onClick.AddListener(stateMachine.GoBack);
             _registerButton.onClick.AddListener(HandleRegister);
         }
 
