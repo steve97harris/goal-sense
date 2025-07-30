@@ -10,6 +10,7 @@ namespace Framework.Screens
     {
         public TMP_Text dateTime;
         public TMP_Text result;
+        public TMP_Text status;
         public TMP_Text homeTeam;
         public TMP_Text awayTeam;
         public RawImage homeTeamLogo;
@@ -21,6 +22,7 @@ namespace Framework.Screens
         {
             dateTime.text = string.Empty;
             result.text = string.Empty;
+            status.text = string.Empty;
             homeTeam.text = string.Empty;
             awayTeam.text = string.Empty;
             homeTeamLogo.texture = null;

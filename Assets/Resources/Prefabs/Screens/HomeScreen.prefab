@@ -410,6 +410,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TmpTitleText
       objectReference: {fileID: 0}
+    - target: {fileID: 8457737214283878532, guid: 908adcb49116d7f43a84d9bb6e451a84, type: 3}
+      propertyPath: m_text
+      value: Goal Sense
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

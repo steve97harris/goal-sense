@@ -93,12 +93,9 @@ namespace Framework.Screens
                 
                 matchCardObj.homeTeam.text = fixture.HomeTeam;
                 matchCardObj.awayTeam.text = fixture.AwayTeam;
-                matchCardObj.dateTime.text = fixture.Kickoff.ToString("dd/MM/yyyy");
-                
-                if (fixture.Status is "TIMED" or "SCHEDULED")
-                    matchCardObj.result.text = fixture.Kickoff.ToString("t", new CultureInfo("en-US")).ToLower();
-                else
-                    matchCardObj.result.text = $"{fixture.HomeScore} : {fixture.AwayScore}";
+                matchCardObj.dateTime.text = fixture.Kickoff.ToString("HH:mm dd/MM/yyyy");
+                matchCardObj.result.text = $"{fixture.HomeScore} : {fixture.AwayScore}";
+                matchCardObj.status.text = $"Status: {fixture.Status}";
                 
                 ImageLoaderService.LoadImageToRawImage(fixture.HomeTeamLogo, matchCardObj.homeTeamLogo);
                 ImageLoaderService.LoadImageToRawImage(fixture.AwayTeamLogo, matchCardObj.awayTeamLogo);

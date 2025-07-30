@@ -23,7 +23,7 @@ namespace Framework.Screens
 
         private void OnClick()
         {
-            StateMachine.ChangeState(ScreenName.MiniLeagueTableScreen);
+            StateMachine.ChangeState(ScreenName.MiniLeagueTableScreen, MiniLeague);
         }
     }
 }

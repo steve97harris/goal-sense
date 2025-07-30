@@ -49,6 +49,8 @@ namespace Framework.Screens.MiniLeagues
                     return;
                 }
             
+                Debug.Log(response.data?.Count + " players in mini league table");
+                
                 foreach (Transform child in miniLeagueTableContent)
                     Destroy(child.gameObject);
 
