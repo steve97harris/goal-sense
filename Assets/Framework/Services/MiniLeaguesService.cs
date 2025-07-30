@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 namespace Framework.Services
@@ -80,6 +81,24 @@ namespace Framework.Services
             {
                 Debug.LogError(ex.Message);
                 return new ApiResponse<MiniLeague>();
+            }
+        }
+
+        public static async Task<ApiResponse<List<MiniLeagueTableData>>> GetMiniLeagueTable(string miniLeagueId)
+        {
+            try
+            {
+                const string endpoint = "minileagues/table";
+                return await GetAsync<ApiResponse<List<MiniLeagueTableData>>>(endpoint, 
+                    new Dictionary<string, string>
+                    {
+                        { "miniLeagueId", miniLeagueId }
+                    });
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex.Message);
+                return new ApiResponse<List<MiniLeagueTableData>>();
             }
         }
     }

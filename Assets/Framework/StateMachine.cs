@@ -18,7 +18,8 @@ namespace Framework
         MiniLeaguesScreen,
         FirstLoadScreen,
         CreateMiniLeagueScreen,
-        JoinMiniLeagueScreen
+        JoinMiniLeagueScreen,
+        MiniLeagueTableScreen
     }
     public enum ScreenViewport
     {
@@ -60,7 +61,7 @@ namespace Framework
             ImageLoaderService.ClearCache();
         }
 
-        public void ChangeState(ScreenName screenName)
+        public void ChangeState(ScreenName screenName, object screenData = null)
         {
             if (_currentScreen != null && 
                 _currentScreen.screenName == screenName)
@@ -73,8 +74,13 @@ namespace Framework
             }
 
             if (_screenDict.TryGetValue(screenName, out var nextScreen))
+            {
                 _currentScreen = Instantiate(nextScreen, 
                     GetViewport(nextScreen.screenViewport));
+                
+                if (screenData != null && _currentScreen is IScreenData screenWithData)
+                    screenWithData.SetScreenData(screenData);
+            }
             else
                 Debug.LogWarning($"Screen '{screenName}' not found.");
         }

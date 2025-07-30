@@ -14,6 +14,7 @@ namespace Framework.Screens
         public Button button;
         
         private static MiniLeaguesScreen MiniLeaguesScreen => MiniLeaguesScreen.instance;
+        private static StateMachine StateMachine => StateMachine.Instance;
         
         private void Awake()
         {
@@ -22,7 +23,7 @@ namespace Framework.Screens
 
         private void OnClick()
         {
-            
+            StateMachine.ChangeState(ScreenName.MiniLeagueTableScreen);
         }
     }
 }
