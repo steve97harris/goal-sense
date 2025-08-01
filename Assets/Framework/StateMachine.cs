@@ -56,6 +56,12 @@ namespace Framework
                 ScreenName.HomeScreen : ScreenName.FirstLoadScreen);
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F1))
+                ScreenCapture.CaptureScreenshot($"C:\\YR\\Screenshots\\{DateTime.Now.ToString("yyyy-M-d-HH-mm-ss")}.png");
+        }
+
         private void OnDestroy()
         {
             ImageLoaderService.ClearCache();
