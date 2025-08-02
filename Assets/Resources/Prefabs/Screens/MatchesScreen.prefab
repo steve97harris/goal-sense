@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2582487167513934765}
   - component: {fileID: 7636537231896045067}
   m_Layer: 5
-  m_Name: HomeScreen
+  m_Name: MatchesScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dateButton: {fileID: 3797041693602452053, guid: abb7f9e22c28e2f439bb525cdbd4ccfd, type: 3}
+  matchCardHolder: {fileID: 2634502106823937222, guid: 97fb13b541f8e634493697b10bedd654, type: 3}
   matchCard: {fileID: 4782005443745022574, guid: be1ba74807b68a9428e9202b26426f8b, type: 3}
   noMatchesCard: {fileID: 4067993285381661298, guid: d29ab051daf8f9d479559a122b617ba5, type: 3}
   datesContent: {fileID: 2401110954133186899}

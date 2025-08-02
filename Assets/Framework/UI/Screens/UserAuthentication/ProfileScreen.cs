@@ -25,8 +25,8 @@ namespace Framework.Screens
         {
             logoutButton.onClick.AddListener(Logout);
             savePlayerNameButton.onClick.AddListener(SavePlayerName);
-            playerNameInputField.onValueChanged.AddListener((string value) => EnableSavePlayerNameButton(true));
             LoadUserInfo();
+            playerNameInputField.onValueChanged.AddListener((string value) => EnableSavePlayerNameButton(true));
         }
 
         private void OnDestroy()

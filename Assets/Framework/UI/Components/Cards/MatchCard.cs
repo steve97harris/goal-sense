@@ -8,9 +8,8 @@ namespace Framework.Screens
 {
     public class MatchCard : MonoBehaviour, IPoolable
     {
-        public TMP_Text dateTime;
+        public TMP_Text kickoffTime;
         public TMP_Text result;
-        public TMP_Text status;
         public TMP_Text homeTeam;
         public TMP_Text awayTeam;
         public RawImage homeTeamLogo;
@@ -20,9 +19,8 @@ namespace Framework.Screens
         
         public void OnDespawn()
         {
-            dateTime.text = string.Empty;
+            kickoffTime.text = string.Empty;
             result.text = string.Empty;
-            status.text = string.Empty;
             homeTeam.text = string.Empty;
             awayTeam.text = string.Empty;
             homeTeamLogo.texture = null;

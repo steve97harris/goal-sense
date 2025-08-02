@@ -29,12 +29,14 @@ namespace Framework.Services
             _pool.Enqueue(obj);
         }
 
-        public T Get()
+        public T Get(Transform parent = null)
         {
             if (_pool.Count == 0)
                 CreateNewObject();
 
             var obj = _pool.Dequeue();
+            if (parent != null)
+                obj.transform.SetParent(parent, false);
             obj.gameObject.SetActive(true);
             _activeObjects.Add(obj);
             

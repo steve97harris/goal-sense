@@ -12,7 +12,7 @@ namespace Framework.Screens
         public Button button;
         public Image underline;
         
-        private static HomeScreen HomeScreen => HomeScreen.instance;
+        private static MatchesScreen MatchesScreen => MatchesScreen.instance;
         
         private void Awake()
         {
@@ -21,9 +21,9 @@ namespace Framework.Screens
 
         private void OnClick()
         {
-            HomeScreen.LoadMatchesByDate(DateTime);
-            HomeScreen.EnableMatchesByDate(DateTime);
-            HomeScreen.SetDateButtonsView(this);
+            MatchesScreen.LoadMatchesByDate(DateTime);
+            MatchesScreen.SetDateButtonsView(this);
+            MatchesScreen.RebuildMatchCardLayouts();
         }
     }
 }
