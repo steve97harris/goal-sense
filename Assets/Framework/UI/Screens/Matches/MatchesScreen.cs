@@ -30,6 +30,7 @@ namespace Framework.Screens
         private List<MatchCard> _matches = new List<MatchCard>();
         private List<DateButton> _matchDayButtons = new List<DateButton>();
         private List<Fixture> _fixtures = new List<Fixture>();
+        private List<Competition> _competitions = new List<Competition>();
         private GameObject _noMatchesCard;
 
         private void Awake()
@@ -57,12 +58,24 @@ namespace Framework.Screens
 
         private async void Initialize()
         {
+            var competitionsResponse = await CompetitionsService.GetCompetitions();
+            if (!competitionsResponse.success)
+            {
+                Debug.LogError($"Competitions response failed\n{competitionsResponse.message}");
+                return;
+            }
+            
+            _competitions = competitionsResponse.data!;
+            
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
             var yesterdayGmt = dateTimeNowGmt.AddDays(-1);
             var dateTimeNowPlus2Days = dateTimeNowGmt.AddDays(2);
             var fixturesResponse = await FixturesService.GetFixturesAsync(yesterdayGmt.ToString("yyyy-MM-dd"), dateTimeNowPlus2Days.ToString("yyyy-MM-dd"));
             if (!fixturesResponse.success)
+            {
+                Debug.LogError($"Fixtures response failed\n{fixturesResponse.message}");
                 return;
+            }
 
             _fixtures = fixturesResponse.data!;
             _noMatchesCard = Instantiate(noMatchesCard, matchesContent);
@@ -98,27 +111,18 @@ namespace Framework.Screens
                 .GroupBy(x => x.LeagueId)
                 .ToDictionary(g => g.Key, g => g.ToList());
             
+            var competitionsById = _competitions.ToDictionary(x => x.Id);
+            
             foreach (var kvp in fixturesByLeagueId)
             {
                 var matchHolder = _matchCardHolderPool.Get();
-                matchHolder.headerText.text = kvp.Key.ToString();
+                matchHolder.headerText.text = competitionsById[kvp.Key].Name;;
                 
-                foreach (var fixture in kvp.Value)
+                foreach (var fixture in kvp.Value.OrderBy(x => x.Kickoff))
                 {
                     var matchCardObj = _matchCardPool.Get(matchHolder.matchesContent);
-                
-                    matchCardObj.Fixture = fixture;
-                
-                    matchCardObj.homeTeam.text = fixture.HomeTeam;
-                    matchCardObj.awayTeam.text = fixture.AwayTeam;
-                    matchCardObj.kickoffTime.text = fixture.Kickoff.ToString("h:mm tt").ToLower();
-                    matchCardObj.kickoffTime.gameObject.SetActive(fixture.Status is "TIMED" or "SCHEDULED");
-                    matchCardObj.result.text = $"{fixture.HomeScore} : {fixture.AwayScore}";
-                    matchCardObj.result.gameObject.SetActive(fixture.Status is not ("TIMED" or "SCHEDULED"));
-
-                    ImageLoaderService.LoadImageToRawImage(fixture.HomeTeamLogo, matchCardObj.homeTeamLogo);
-                    ImageLoaderService.LoadImageToRawImage(fixture.AwayTeamLogo, matchCardObj.awayTeamLogo);
-                
+                    matchCardObj.Initialize(fixture);
+                    
                     _matches.Add(matchCardObj);
                 }
                 _matchCardHolders.Add(matchHolder);

@@ -1,6 +1,8 @@
 ﻿using Framework.Extensions;
 using Framework.Services;
 using System;
+using DG.Tweening;
+using Framework.UI.Components.PopUps;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +21,9 @@ namespace Framework.Screens
         public TMP_InputField awayScoreInput;
         public Button editButton;
         public Button submitButton;
+        
+        [SerializeField] private SubmittedPopUp submittedPopUp;
+        [SerializeField] private SubmissionFailedPopUp submissionFailedPopUp;
         
         public Fixture Fixture { get; set; }
         public bool Locked
@@ -90,18 +95,30 @@ namespace Framework.Screens
                     fixtureId, int.Parse(homeScoreInput.text), 
                     int.Parse(awayScoreInput.text));
                 if (!response.success)
+                {
                     Debug.LogError(response.message);
+                    LoadSubmissionFailedPopUp(response.message);
+                }
                 else
+                {
                     Debug.Log(response.message);
+                    LoadSubmittedPopUp();
+                }
                 return;
             }
             var updateResponse = await PredictionsService.UpdatePredictionAsync(userId, fixtureId,
                 int.Parse(homeScoreInput.text),
                 int.Parse(awayScoreInput.text));
             if (!updateResponse.success)
+            {
                 Debug.LogError(updateResponse.message);
+                LoadSubmissionFailedPopUp(updateResponse.message);
+            }
             else
+            {
                 Debug.Log(updateResponse.message);
+                LoadSubmittedPopUp();
+            }
         }
 
         private void OnHomeScoreInputChanged(string value)
@@ -115,6 +132,19 @@ namespace Framework.Screens
         {
             editButton.gameObject.SetActive(!_isLocked);
             lockIcon.gameObject.SetActive(_isLocked);
+        }
+
+        private void LoadSubmittedPopUp()
+        {
+            var popUp = Instantiate(submittedPopUp, this.transform);
+            popUp.canvasGroup.alpha = 0f;
+        }
+
+        private void LoadSubmissionFailedPopUp(string message)
+        {
+            var popUp = Instantiate(submissionFailedPopUp, this.transform);
+            popUp.canvasGroup.alpha = 0f;
+            popUp.message.text = $"Error, submission failed - {message}";
         }
     }
 }

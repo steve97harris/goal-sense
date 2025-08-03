@@ -345,6 +345,8 @@ MonoBehaviour:
   awayScoreInput: {fileID: 6026769298862187819}
   editButton: {fileID: 1303051828508323006}
   submitButton: {fileID: 6701632929133075697}
+  submittedPopUp: {fileID: 7015972794868118438, guid: 0fcf77dd743f34a4e94ea3ceddbceee2, type: 3}
+  submissionFailedPopUp: {fileID: 6584150550874452592, guid: 401d5df0d2b0a4747885347ab5e12993, type: 3}
 --- !u!1001 &1840847194444544741
 PrefabInstance:
   m_ObjectHideFlags: 0
