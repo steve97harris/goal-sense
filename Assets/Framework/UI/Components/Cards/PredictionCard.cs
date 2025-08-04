@@ -13,6 +13,7 @@ namespace Framework.Screens
         public Image lockIcon;
         public TMP_Text dateTime;
         public TMP_Text result;
+        public TMP_Text pointsAwarded;
         public TMP_Text homeTeam;
         public TMP_Text awayTeam;
         public RawImage homeTeamLogo;
@@ -49,6 +50,8 @@ namespace Framework.Screens
             awayScoreInput.text = string.Empty;
             homeTeamLogo.texture = null;
             awayTeamLogo.texture = null;
+            result.text = "Result: -";
+            pointsAwarded.text = "Points awarded: -";
             Locked = false;
             homeScoreInput.onValueChanged.RemoveAllListeners();
             awayScoreInput.onValueChanged.RemoveAllListeners();
@@ -60,6 +63,33 @@ namespace Framework.Screens
             homeScoreInput.onValueChanged.AddListener(OnHomeScoreInputChanged);
             editButton.onClick.AddListener(Edit);
             submitButton.onClick.AddListener(Submit);
+        }
+
+        public void Initialize(Fixture fixture, DateTime dateTimeNowGmt, Prediction existingPrediction)
+        {
+            Fixture = fixture;
+            homeTeam.text = fixture.HomeTeam;
+            awayTeam.text = fixture.AwayTeam;
+            dateTime.text = fixture.Kickoff.ToString("h:mm tt").ToLower();
+                
+            ImageLoaderService.LoadImageToRawImage(fixture.HomeTeamLogo, homeTeamLogo);
+            ImageLoaderService.LoadImageToRawImage(fixture.AwayTeamLogo, awayTeamLogo);
+                
+            // set prediction if already submitted
+            homeScoreInput.text = existingPrediction != default ? 
+                existingPrediction.PredictedHomeScore.ToString() : "";
+            awayScoreInput.text = existingPrediction != default ? 
+                existingPrediction.PredictedAwayScore.ToString() : "";
+                
+            // lock prediction if game started
+            Locked = dateTimeNowGmt >= fixture.Kickoff;
+            if (Locked && existingPrediction is { IsProcessed: true })
+            {
+                result.text = $"Result: {fixture.HomeScore} - {fixture.AwayScore}";
+                pointsAwarded.text = $"Points awarded: {existingPrediction.PointsAwarded}";
+            }
+            
+            gameObject.SetActive(true);
         }
 
         private void Edit()

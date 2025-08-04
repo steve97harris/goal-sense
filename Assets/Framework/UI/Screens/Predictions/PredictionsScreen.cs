@@ -15,6 +15,7 @@ namespace Framework.Screens
         public static PredictionsScreen instance;
         
         [SerializeField] private GameweekButton gameweekButton;
+        [SerializeField] private PredictionDateText predictionDateText;
         [SerializeField] private PredictionCard predictionCard;
         [SerializeField] private Transform gameweeksContent;
         [SerializeField] private Transform predictionsContent;
@@ -84,33 +85,32 @@ namespace Framework.Screens
         {
             foreach (var predictionView in _predictionCards)
                 _predictionCardPool.Return(predictionView);
-
+            foreach (var child in GetComponentsInChildren<PredictionDateText>(predictionsContent))
+                Destroy(child.gameObject);
+                
             _predictionCards = new List<PredictionCard>();
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
             var fixtures = _premierLeagueFixtures.Where(x => x.Matchweek == gameweek).ToList();
-            
-            foreach (var fixture in fixtures)
+            var fixturesByDate = fixtures.GroupBy(x => x.Kickoff.Date)
+                .ToDictionary(x => x.Key, x => x.ToList());;
+
+            var siblingIdx = 0;
+            foreach (var kvp in fixturesByDate)
             {
-                var prediction = _predictionCardPool.Get();
-                prediction.Fixture = fixture;
-                prediction.homeTeam.text = fixture.HomeTeam;
-                prediction.awayTeam.text = fixture.AwayTeam;
-                prediction.dateTime.text = fixture.Kickoff.ToString("HH:mm dd/MM/yyyy");
+                var date = kvp.Key;
+                var dateDisplay = Instantiate(predictionDateText, predictionsContent);
+                dateDisplay.text.text = date.ToString("d MMM");
+                dateDisplay.transform.SetSiblingIndex(siblingIdx);
                 
-                ImageLoaderService.LoadImageToRawImage(fixture.HomeTeamLogo, prediction.homeTeamLogo);
-                ImageLoaderService.LoadImageToRawImage(fixture.AwayTeamLogo, prediction.awayTeamLogo);
-                
-                // set prediction if already submitted
-                var existingPrediction = _existingPredictions.FirstOrDefault(x => x.FixtureId == fixture.Id);
-                prediction.homeScoreInput.text = existingPrediction != default ? 
-                    existingPrediction.PredictedHomeScore.ToString() : "";
-                prediction.awayScoreInput.text = existingPrediction != default ? 
-                    existingPrediction.PredictedAwayScore.ToString() : "";
-                
-                // lock prediction if game started
-                prediction.Locked = dateTimeNowGmt >= fixture.Kickoff;
-                prediction.gameObject.SetActive(true);
-                _predictionCards.Add(prediction);
+                foreach (var fixture in kvp.Value.OrderBy(x => x.Kickoff))
+                {
+                    var prediction = _predictionCardPool.Get();
+                    var existingPredictionData = _existingPredictions.FirstOrDefault(x => x.FixtureId == fixture.Id);
+                    prediction.Initialize(fixture, dateTimeNowGmt, existingPredictionData);
+                    siblingIdx = prediction.transform.GetSiblingIndex();
+                    _predictionCards.Add(prediction);
+                }
+                siblingIdx++;
             }
         }
 

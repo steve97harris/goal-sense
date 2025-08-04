@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameweekButton: {fileID: 3994269301728878737, guid: 0f434d6f9b91fc449b31ea3e7e8d0aa5, type: 3}
+  predictionDateText: {fileID: 4731075478923728832, guid: 7f827372688c1e44d81b189b56958e27, type: 3}
   predictionCard: {fileID: 6859348552249460684, guid: dcaf05463be53674fbfdc20e4c989577, type: 3}
   gameweeksContent: {fileID: 7419509378581190393}
   predictionsContent: {fileID: 7316659994347220288}
