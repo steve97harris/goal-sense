@@ -41,6 +41,8 @@ namespace Framework.Screens
         }
         private bool _isLocked;
         
+        private static PredictionsScreen PredictionsScreen => PredictionsScreen.instance;
+        
         public void OnDespawn()
         {
             homeTeam.text = string.Empty;
@@ -112,17 +114,35 @@ namespace Framework.Screens
 
         private async void SubmitPrediction()
         {
-            if (string.IsNullOrEmpty(homeScoreInput.text))
-                return;
-            if (string.IsNullOrEmpty(awayScoreInput.text))
-                return;
-            var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
-            var fixtureId = Fixture.Id.ToString();
-            var existingPredictionResponse = await PredictionsService.GetPredictionAsync(userId, fixtureId);
-            if (!existingPredictionResponse.success)
+            try
+            {
+                if (string.IsNullOrEmpty(homeScoreInput.text))
+                    return;
+                if (string.IsNullOrEmpty(awayScoreInput.text))
+                    return;
+                var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
+                var fixtureId = Fixture.Id.ToString();
+                var predictionResponse = await PredictionsService.GetPredictionAsync(userId, fixtureId);
+                if (!predictionResponse.success)
+                {
+                    SubmitNewPrediction(userId, fixtureId);
+                    return;
+                }
+                UpdatePrediction(userId, fixtureId);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
+
+        private async void SubmitNewPrediction(string userId, string fixtureId)
+        {
+            try
             {
                 var response = await PredictionsService.SubmitPredictionAsync(userId, 
-                    fixtureId, int.Parse(homeScoreInput.text), 
+                    fixtureId, 
+                    int.Parse(homeScoreInput.text), 
                     int.Parse(awayScoreInput.text));
                 if (!response.success)
                 {
@@ -132,22 +152,39 @@ namespace Framework.Screens
                 else
                 {
                     Debug.Log(response.message);
+                    PredictionsScreen.UpdatePredictionListWithNewPrediction(response.data);
                     LoadSubmittedPopUp();
                 }
-                return;
             }
-            var updateResponse = await PredictionsService.UpdatePredictionAsync(userId, fixtureId,
-                int.Parse(homeScoreInput.text),
-                int.Parse(awayScoreInput.text));
-            if (!updateResponse.success)
+            catch (Exception e)
             {
-                Debug.LogError(updateResponse.message);
-                LoadSubmissionFailedPopUp(updateResponse.message);
+                Debug.LogError(e);
             }
-            else
+        }
+
+        private async void UpdatePrediction(string userId, string fixtureId)
+        {
+            try
             {
-                Debug.Log(updateResponse.message);
-                LoadSubmittedPopUp();
+                var updateResponse = await PredictionsService.UpdatePredictionAsync(userId, 
+                    fixtureId,
+                    int.Parse(homeScoreInput.text),
+                    int.Parse(awayScoreInput.text));
+                if (!updateResponse.success)
+                {
+                    Debug.LogError(updateResponse.message);
+                    LoadSubmissionFailedPopUp(updateResponse.message);
+                }
+                else
+                {
+                    Debug.Log(updateResponse.message);
+                    PredictionsScreen.UpdatePredictionListWithNewPrediction(updateResponse.data);
+                    LoadSubmittedPopUp();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }
 

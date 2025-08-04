@@ -20,7 +20,7 @@ namespace Framework.Screens
         [SerializeField] private Transform gameweeksContent;
         [SerializeField] private Transform predictionsContent;
 
-        private List<Prediction> _existingPredictions = new List<Prediction>();
+        private List<Prediction> _predictions = new List<Prediction>();
         private List<Fixture> _premierLeagueFixtures = new List<Fixture>();
         private List<string> _gameweeks = new List<string>();
         private string _currentGameweek;
@@ -58,7 +58,7 @@ namespace Framework.Screens
             }
             var response = await PredictionsService.GetPredictionsAsync(userId);
             if (response.success && response.data != null)
-                _existingPredictions = response.data;
+                _predictions = response.data;
 
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
             var premierLeagueFixturesResponse = await FixturesService.GetPremierLeagueFixturesAsync();
@@ -105,13 +105,25 @@ namespace Framework.Screens
                 foreach (var fixture in kvp.Value.OrderBy(x => x.Kickoff))
                 {
                     var prediction = _predictionCardPool.Get();
-                    var existingPredictionData = _existingPredictions.FirstOrDefault(x => x.FixtureId == fixture.Id);
+                    var existingPredictionData = _predictions.FirstOrDefault(x => x.FixtureId == fixture.Id);
                     prediction.Initialize(fixture, dateTimeNowGmt, existingPredictionData);
                     siblingIdx = prediction.transform.GetSiblingIndex();
                     _predictionCards.Add(prediction);
                 }
                 siblingIdx++;
             }
+        }
+
+        public void UpdatePredictionListWithNewPrediction(Prediction prediction)
+        {
+            var existingPrediction = _predictions.FirstOrDefault(x => x.Id == prediction.Id);
+            if (existingPrediction != null)
+            {
+                existingPrediction.PredictedHomeScore = prediction.PredictedHomeScore;
+                existingPrediction.PredictedAwayScore = prediction.PredictedAwayScore;
+            }
+            else 
+                _predictions.Add(prediction);
         }
 
         private void LoadGameweekButtons()
