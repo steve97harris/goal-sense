@@ -20,6 +20,7 @@ namespace Framework.Screens.MiniLeagues
         [SerializeField] private TMP_Text miniLeagueName;
         [SerializeField] private MiniLeagueTableRow miniLeagueTableRow;
         [SerializeField] private Transform miniLeagueTableContent;
+        [SerializeField] private TMP_Text inviteCode;
         
         public void SetScreenData(object data)
         {
@@ -27,6 +28,7 @@ namespace Framework.Screens.MiniLeagues
                 MiniLeague = miniLeague;
             
             miniLeagueName.text = MiniLeague.Name;
+            inviteCode.text = $"Invite code: {MiniLeague.InviteCode}";
             LoadMiniLeagueTable();
         }
         

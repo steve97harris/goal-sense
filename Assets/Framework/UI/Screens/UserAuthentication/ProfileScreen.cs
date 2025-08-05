@@ -16,38 +16,107 @@ namespace Framework.Screens
         public override ScreenName screenName => ScreenName.ProfileScreen;
         public override ScreenViewport screenViewport => ScreenViewport.MainView;
         
-        [SerializeField] private TMP_Text emailText;
+        [SerializeField] private TMP_InputField emailInputField;
         [SerializeField] private TMP_InputField playerNameInputField;
         [SerializeField] private Button savePlayerNameButton;
+        [SerializeField] private Button saveEmailButton;
         [SerializeField] private Button logoutButton;
+
+        private string _userFullName;
+        private string _email;
 
         private void Awake()
         {
+            LoadUserInfo();
             logoutButton.onClick.AddListener(Logout);
             savePlayerNameButton.onClick.AddListener(SavePlayerName);
-            LoadUserInfo();
-            playerNameInputField.onValueChanged.AddListener((string value) => EnableSavePlayerNameButton(true));
+            saveEmailButton.onClick.AddListener(SaveEmail);
+            playerNameInputField.onValueChanged.AddListener(PlayerNameChanged);
+            emailInputField.onValueChanged.AddListener(EmailChanged);
         }
 
         private void OnDestroy()
         {
             logoutButton.onClick.RemoveListener(Logout);
             savePlayerNameButton.onClick.RemoveListener(SavePlayerName);
-            playerNameInputField.onValueChanged.RemoveListener((string value) => EnableSavePlayerNameButton(true));
+            saveEmailButton.onClick.RemoveListener(SaveEmail);
+            playerNameInputField.onValueChanged.RemoveListener(PlayerNameChanged);
+            emailInputField.onValueChanged.RemoveListener(EmailChanged);
         }
 
-        private void SavePlayerName()
+        private async void SavePlayerName()
         {
-            var updatedPlayerName = playerNameInputField.text;
-            // TODO send updated player name to api
-            Debug.Log("TODO send updated player name to api");
+            try
+            {
+                var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    Debug.LogError("User id is null");
+                    return;
+                }
+                var updatedPlayerName = playerNameInputField.text;
+                await UserAuthService.UpdateProfileAsync(userId, "", updatedPlayerName);
+                EnableSavePlayerNameButton(
+                    savePlayerNameButton.GetComponent<CanvasGroup>(), 
+                    false);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
+        
+        private async void SaveEmail()
+        {
+            try
+            {
+                var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    Debug.LogError("User id is null");
+                    return;
+                }
+                var updatedEmail = emailInputField.text;
+                await UserAuthService.UpdateProfileAsync(userId, updatedEmail, "");
+                EnableSavePlayerNameButton(
+                    saveEmailButton.GetComponent<CanvasGroup>(), 
+                    false);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
-        private void EnableSavePlayerNameButton(bool enable)
+        private void PlayerNameChanged(string value)
         {
-            savePlayerNameButton.GetComponent<CanvasGroup>().interactable = enable;
-            savePlayerNameButton.GetComponent<CanvasGroup>().blocksRaycasts = enable;
-            savePlayerNameButton.GetComponent<CanvasGroup>().alpha = enable ? 1 : 0.3f;
+            if (string.IsNullOrEmpty(value) || 
+                string.IsNullOrEmpty(_userFullName) ||
+                value == _userFullName)
+                return;
+            _userFullName = value;
+            EnableSavePlayerNameButton(
+                savePlayerNameButton.GetComponent<CanvasGroup>(), 
+                true);
+        }
+        
+        private void EmailChanged(string value)
+        {
+            if (string.IsNullOrEmpty(value) || 
+                string.IsNullOrEmpty(_email) ||
+                value == _email)
+                return;
+            _email = value;
+            EnableSavePlayerNameButton(
+                saveEmailButton.GetComponent<CanvasGroup>(),
+                true);
+        }
+
+        private void EnableSavePlayerNameButton(CanvasGroup cg, bool enable)
+        {
+            cg.interactable = enable;
+            cg.blocksRaycasts = enable;
+            cg.alpha = enable ? 1 : 0.3f;
         }
 
         private static void Logout()
@@ -69,10 +138,12 @@ namespace Framework.Screens
                     return;
                 }
                 var user = response.data!;
+                _userFullName = user.userFullName;
+                _email = user.email;
             
                 Debug.Log($"user profile:\n{user.userId}\n{user.email}\n{user.userFullName}");
-                
-                emailText.text = $"Email: {user.email}";
+
+                emailInputField.text = user.email;
                 playerNameInputField.text = user.userFullName;
             }
             catch (Exception e)
