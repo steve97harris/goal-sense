@@ -38,7 +38,10 @@ namespace Framework.Screens
 
             _predictionCardPool = new ObjectPool<PredictionCard>(predictionCard, predictionsContent, 20);
             _gameweekButtonPool = new ObjectPool<GameweekButton>(gameweekButton, gameweeksContent, 38);
-            
+        }
+
+        private void Start()
+        {
             Initialize();
         }
 
@@ -50,27 +53,34 @@ namespace Framework.Screens
 
         private async void Initialize()
         {
-            var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
-            if (string.IsNullOrEmpty(userId))
+            try
             {
-                Debug.LogError("User ID is null, please login");
-                return;
-            }
-            var response = await PredictionsService.GetPredictionsAsync(userId);
-            if (response.success && response.data != null)
-                _predictions = response.data;
+                var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    Debug.LogError("User ID is null, please login");
+                    return;
+                }
+                var response = await PredictionsService.GetPredictionsAsync(userId);
+                if (response.success && response.data != null)
+                    _predictions = response.data;
 
-            var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
-            var premierLeagueFixturesResponse = await FixturesService.GetPremierLeagueFixturesAsync();
-            if (!premierLeagueFixturesResponse.success)
-                return;
+                var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
+                var premierLeagueFixturesResponse = await FixturesService.GetPremierLeagueFixturesAsync();
+                if (!premierLeagueFixturesResponse.success)
+                    return;
             
-            _premierLeagueFixtures = premierLeagueFixturesResponse.data!;
-            _currentGameweek = GetCurrentGameweek(premierLeagueFixturesResponse.data, dateTimeNowGmt);
-            _gameweeks = premierLeagueFixturesResponse.data!.Select(x => x.Matchweek).Distinct().OrderBy(int.Parse).ToList();
+                _premierLeagueFixtures = premierLeagueFixturesResponse.data!;
+                _currentGameweek = GetCurrentGameweek(premierLeagueFixturesResponse.data, dateTimeNowGmt);
+                _gameweeks = premierLeagueFixturesResponse.data!.Select(x => x.Matchweek).Distinct().OrderBy(int.Parse).ToList();
             
-            LoadGameweekButtons();
-            TriggerGameweekButton(_currentGameweek);
+                LoadGameweekButtons();
+                TriggerGameweekButton(_currentGameweek);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private void TriggerGameweekButton(string gameweek)

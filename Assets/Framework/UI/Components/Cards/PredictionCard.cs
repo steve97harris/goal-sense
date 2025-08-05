@@ -58,6 +58,12 @@ namespace Framework.Screens
             homeScoreInput.onValueChanged.RemoveAllListeners();
             awayScoreInput.onValueChanged.RemoveAllListeners();
             Fixture = null;
+            var submittedPopUp = GetComponentInChildren<SubmittedPopUp>();
+            if (submittedPopUp != null)
+                Destroy(submittedPopUp.gameObject);
+            var submissionFailedPopUp = GetComponentInChildren<SubmissionFailedPopUp>();
+            if (submissionFailedPopUp != null)
+                Destroy(submissionFailedPopUp.gameObject);
         }
 
         private void Start()

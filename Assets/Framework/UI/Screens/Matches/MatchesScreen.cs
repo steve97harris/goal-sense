@@ -42,7 +42,10 @@ namespace Framework.Screens
             
             _matchCardHolderPool = new ObjectPool<MatchCardHolder>(matchCardHolder, matchesContent, 20);
             _matchCardPool = new ObjectPool<MatchCard>(matchCard, matchesContent, 50);
-            
+        }
+
+        private void Start()
+        {
             Initialize();
         }
 
@@ -58,34 +61,41 @@ namespace Framework.Screens
 
         private async void Initialize()
         {
-            var competitionsResponse = await CompetitionsService.GetCompetitions();
-            if (!competitionsResponse.success)
+            try
             {
-                Debug.LogError($"Competitions response failed\n{competitionsResponse.message}");
-                return;
-            }
+                var competitionsResponse = await CompetitionsService.GetCompetitions();
+                if (!competitionsResponse.success)
+                {
+                    Debug.LogError($"Competitions response failed\n{competitionsResponse.message}");
+                    return;
+                }
             
-            _competitions = competitionsResponse.data!;
+                _competitions = competitionsResponse.data!;
             
-            var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
-            var yesterdayGmt = dateTimeNowGmt.AddDays(-1);
-            var dateTimeNowPlus2Days = dateTimeNowGmt.AddDays(2);
-            var fixturesResponse = await FixturesService.GetFixturesAsync(yesterdayGmt.ToString("yyyy-MM-dd"), dateTimeNowPlus2Days.ToString("yyyy-MM-dd"));
-            if (!fixturesResponse.success)
-            {
-                Debug.LogError($"Fixtures response failed\n{fixturesResponse.message}");
-                return;
-            }
+                var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
+                var yesterdayGmt = dateTimeNowGmt.AddDays(-1);
+                var dateTimeNowPlus2Days = dateTimeNowGmt.AddDays(2);
+                var fixturesResponse = await FixturesService.GetFixturesAsync(yesterdayGmt.ToString("yyyy-MM-dd"), dateTimeNowPlus2Days.ToString("yyyy-MM-dd"));
+                if (!fixturesResponse.success)
+                {
+                    Debug.LogError($"Fixtures response failed\n{fixturesResponse.message}");
+                    return;
+                }
 
-            _fixtures = fixturesResponse.data!;
-            _noMatchesCard = Instantiate(noMatchesCard, matchesContent);
-            _noMatchesCard.SetActive(false);
+                _fixtures = fixturesResponse.data!;
+                _noMatchesCard = Instantiate(noMatchesCard, matchesContent);
+                _noMatchesCard.SetActive(false);
             
-            var dates = Enumerable.Range(-1, 4)
-                .Select(offset => dateTimeNowGmt.AddDays(offset))
-                .ToList();
-            LoadDateButtons(dates);
-            TriggerDateButton(dateTimeNowGmt);
+                var dates = Enumerable.Range(-1, 4)
+                    .Select(offset => dateTimeNowGmt.AddDays(offset))
+                    .ToList();
+                LoadDateButtons(dates);
+                TriggerDateButton(dateTimeNowGmt);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private void TriggerDateButton(DateTime date)
