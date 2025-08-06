@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using Framework.UI.Components.PopUps;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -15,12 +16,15 @@ namespace Framework.Screens
     {
         public override ScreenName screenName => ScreenName.ProfileScreen;
         public override ScreenViewport screenViewport => ScreenViewport.MainView;
+
+        public DeleteAccountPopUp deleteAccountPopUp;
         
         [SerializeField] private TMP_InputField emailInputField;
         [SerializeField] private TMP_InputField playerNameInputField;
         [SerializeField] private Button savePlayerNameButton;
         [SerializeField] private Button saveEmailButton;
         [SerializeField] private Button logoutButton;
+        [SerializeField] private Button deleteAccountButton;
 
         private string _userFullName;
         private string _email;
@@ -29,6 +33,7 @@ namespace Framework.Screens
         {
             LoadUserInfo();
             logoutButton.onClick.AddListener(Logout);
+            deleteAccountButton.onClick.AddListener(DeleteAccount);
             savePlayerNameButton.onClick.AddListener(SavePlayerName);
             saveEmailButton.onClick.AddListener(SaveEmail);
             playerNameInputField.onValueChanged.AddListener(PlayerNameChanged);
@@ -38,6 +43,7 @@ namespace Framework.Screens
         private void OnDestroy()
         {
             logoutButton.onClick.RemoveListener(Logout);
+            deleteAccountButton.onClick.RemoveListener(DeleteAccount);
             savePlayerNameButton.onClick.RemoveListener(SavePlayerName);
             saveEmailButton.onClick.RemoveListener(SaveEmail);
             playerNameInputField.onValueChanged.RemoveListener(PlayerNameChanged);
@@ -124,6 +130,11 @@ namespace Framework.Screens
             PlayerPrefs.DeleteKey(PlayerPrefsKeys.JWT_TOKEN);
             PlayerPrefs.DeleteKey(PlayerPrefsKeys.USER_ID);
             stateMachine.ChangeState(ScreenName.LoginScreen);
+        }
+
+        private void DeleteAccount()
+        {
+            deleteAccountPopUp.gameObject.SetActive(true);
         }
 
         private async void LoadUserInfo()

@@ -80,9 +80,6 @@ namespace Framework.Screens
             awayTeam.text = fixture.AwayTeam;
             dateTime.text = fixture.Kickoff.ToString("h:mm tt").ToLower();
                 
-            ImageLoaderService.LoadImageToRawImage(fixture.HomeTeamLogo, homeTeamLogo);
-            ImageLoaderService.LoadImageToRawImage(fixture.AwayTeamLogo, awayTeamLogo);
-                
             // set prediction if already submitted
             homeScoreInput.text = existingPrediction != default ? 
                 existingPrediction.PredictedHomeScore.ToString() : "";

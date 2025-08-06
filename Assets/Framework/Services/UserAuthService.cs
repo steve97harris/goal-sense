@@ -53,5 +53,22 @@ namespace Framework.Services
                 return new ApiResponse<UserAuthResponse> { success = false, message = ex.Message };
             }
         }
+        
+        public static async Task<ApiResponse<UserAuthResponse>> DeleteUserAccountAsync(string userId)
+        {
+            try
+            {
+                const string endpoint = "usermanagement/delete-account";
+                return await GetAsync<ApiResponse<UserAuthResponse>>(endpoint, new Dictionary<string, string>()
+                {
+                    { "userId", userId }
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex.Message);
+                return new ApiResponse<UserAuthResponse> { success = false, message = ex.Message };
+            }
+        }
     }
 }

@@ -34,9 +34,6 @@ namespace Framework.Screens
         public void Initialize(Fixture fixture)
         {
             Fixture = fixture;
-            
-            ImageLoaderService.LoadImageToRawImage(fixture.HomeTeamLogo, homeTeamLogo);
-            ImageLoaderService.LoadImageToRawImage(fixture.AwayTeamLogo, awayTeamLogo);
 
             homeTeam.text = fixture.HomeTeam;
             awayTeam.text = fixture.AwayTeam;
