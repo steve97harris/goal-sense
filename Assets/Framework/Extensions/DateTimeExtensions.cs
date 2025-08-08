@@ -1,9 +1,9 @@
 ﻿using System;
 namespace Framework.Extensions
 {
-    public class DateTimeExtensions
+    public static class DateTimeExtensions
     {
-        public static DateTime ConvertUtcTimeToGmt(DateTime utcDateTime)
+        public static DateTime ConvertUtcTimeToGmt(this DateTime utcDateTime)
         {
             try
             {

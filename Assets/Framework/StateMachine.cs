@@ -2,6 +2,7 @@
 using Framework.Screens;
 using System;
 using System.Collections.Generic;
+using Framework.Notifications;
 using Framework.Services;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -56,10 +57,24 @@ namespace Framework
                 ScreenName.HomeScreen : ScreenName.FirstLoadScreen);
         }
 
-        private void Update()
+        private void Start()
         {
-            if (Input.GetKeyDown(KeyCode.F1))
-                ScreenCapture.CaptureScreenshot($"C:\\YR\\Screenshots\\{DateTime.Now.ToString("yyyy-M-d-HH-mm-ss")}.png");
+            InitializeIosPredictionsNotifications();
+        }
+
+        private static async void InitializeIosPredictionsNotifications()
+        {
+            try
+            {
+                var fixtures = await FixturesService.GetPremierLeagueFixturesAsync();
+                if (!fixtures.success)
+                    return;
+                IosPredictionsNotificationScheduler.ScheduleGameweekNotifications(fixtures.data);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private void OnDestroy()

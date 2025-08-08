@@ -83,7 +83,6 @@ GameObject:
   - component: {fileID: 3448575374230486207}
   - component: {fileID: 8279888139892952899}
   - component: {fileID: 7117868493435403493}
-  - component: {fileID: 7724023218444161753}
   - component: {fileID: 4027556229765959717}
   m_Layer: 5
   m_Name: Home-TmpBodyText
@@ -108,7 +107,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 154.125, y: -75}
+  m_AnchoredPosition: {x: 158.25, y: -75}
   m_SizeDelta: {x: 300, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8279888139892952899
@@ -141,8 +140,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Tottenham Hotspur
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
-  m_sharedMaterial: {fileID: 1130111527207623619, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
+  m_sharedMaterial: {fileID: -592416375926974753, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -210,19 +209,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &7724023218444161753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3505659937552594410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c0807f1a7994dcf8879ec93b92ad441, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  style: 4
 --- !u!114 &4027556229765959717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,7 +454,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 5
   m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -488,7 +474,6 @@ GameObject:
   - component: {fileID: 2383288816871135459}
   - component: {fileID: 7607804638718665745}
   - component: {fileID: 7625185036221253575}
-  - component: {fileID: 727735634698518735}
   - component: {fileID: 3846169393348564306}
   m_Layer: 5
   m_Name: Away-TmpBodyText
@@ -513,7 +498,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 257.375, y: -75}
+  m_AnchoredPosition: {x: 253.25, y: -75}
   m_SizeDelta: {x: 300, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7607804638718665745
@@ -546,8 +531,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Manchester City & Hove Albion
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
-  m_sharedMaterial: {fileID: 1130111527207623619, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
+  m_sharedMaterial: {fileID: -592416375926974753, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -615,19 +600,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &727735634698518735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7240201658976415834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c0807f1a7994dcf8879ec93b92ad441, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  style: 4
 --- !u!114 &3846169393348564306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,7 +741,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
+  m_ChildAlignment: 3
   m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
