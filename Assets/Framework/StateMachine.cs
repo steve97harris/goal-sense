@@ -33,6 +33,7 @@ namespace Framework
         public static StateMachine Instance;
 
         public List<Screen> screens;
+        public Transform ForegroundView => _foregroundView;
 
         private Dictionary<ScreenName, Screen> _screenDict;
         private Screen _currentScreen;

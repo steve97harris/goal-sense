@@ -163,8 +163,12 @@ namespace Framework.Screens
         public void SetDateButtonsView(DateButton dateButton)
         {
             foreach (var btn in _matchDayButtons)
+            {
                 btn.underline.gameObject.SetActive(false);
+                btn.canvasGroup.alpha = 0.5f;
+            }
             dateButton.underline.gameObject.SetActive(true);
+            dateButton.canvasGroup.alpha = 1f;
         }
 
         public void RebuildMatchCardLayouts()

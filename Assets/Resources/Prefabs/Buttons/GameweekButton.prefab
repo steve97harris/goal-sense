@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 146219570945478900}
   - component: {fileID: 6532618760445030867}
   - component: {fileID: 3994269301728878737}
+  - component: {fileID: 425921023630852963}
   m_Layer: 5
   m_Name: GameweekButton
   m_TagString: Untagged
@@ -138,6 +139,19 @@ MonoBehaviour:
   text: {fileID: 3094514581352004996}
   button: {fileID: 6532618760445030867}
   underline: {fileID: 3038981817072657320}
+  canvasGroup: {fileID: 425921023630852963}
+--- !u!225 &425921023630852963
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736672055218329347}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2116128033019269034
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,9 +293,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Gameweek
+  m_text: 'Gameweek 1
 
-    1'
+    11/05/25'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
   m_sharedMaterial: {fileID: 1130111527207623619, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
@@ -308,8 +322,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 16

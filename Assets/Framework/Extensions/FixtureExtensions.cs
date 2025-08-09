@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Framework.Services;
 
@@ -35,5 +36,35 @@ namespace Framework.Extensions
                 .ToList();
         }
 
+        public static string GetCurrentGameweek(List<Fixture> fixtures, DateTime dateTimeNowGmt)
+        {
+            fixtures.Sort((a, b) => a.Kickoff.CompareTo(b.Kickoff));
+
+            var currentGameweek = "1";
+            foreach (var fixture in fixtures)
+            {
+                if (fixture.Kickoff > dateTimeNowGmt)
+                {
+                    if ((fixture.Kickoff - dateTimeNowGmt).TotalHours <= 2)
+                    {
+                        currentGameweek = fixture.Matchweek;
+                    }
+                    else
+                    {
+                        var previousFixture = fixtures
+                            .Where(f => f.Kickoff < dateTimeNowGmt)
+                            .OrderByDescending(f => f.Kickoff)
+                            .FirstOrDefault();
+                            
+                        currentGameweek = previousFixture != null ? 
+                            previousFixture.Matchweek : fixture.Matchweek;
+
+                    }
+                    break;
+                }
+                currentGameweek = fixture.Matchweek;
+            }
+            return currentGameweek;
+        }
     }
 }

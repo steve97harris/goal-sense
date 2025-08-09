@@ -3,8 +3,11 @@ using Framework.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Framework.UI.Components.PopUps;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
+
 namespace Framework.Screens
 {
     public class PredictionsScreen : Screen
@@ -18,11 +21,12 @@ namespace Framework.Screens
         [SerializeField] private PredictionDateText predictionDateText;
         [SerializeField] private PredictionCard predictionCard;
         [SerializeField] private Transform gameweeksContent;
-        [SerializeField] private Transform predictionsContent;
+        [SerializeField] public Transform predictionsContent;
+        [SerializeField] public ScrollRect predictionsScrollRect;
 
         private List<Prediction> _predictions = new List<Prediction>();
         private List<Fixture> _premierLeagueFixtures = new List<Fixture>();
-        private List<string> _gameweeks = new List<string>();
+        private List<Fixture> _firstFixturePerGameweeks = new List<Fixture>();
         private string _currentGameweek;
         private ObjectPool<PredictionCard> _predictionCardPool;
         private ObjectPool<GameweekButton> _gameweekButtonPool;
@@ -71,8 +75,8 @@ namespace Framework.Screens
                     return;
             
                 _premierLeagueFixtures = premierLeagueFixturesResponse.data!;
-                _currentGameweek = GetCurrentGameweek(premierLeagueFixturesResponse.data, dateTimeNowGmt);
-                _gameweeks = premierLeagueFixturesResponse.data!.Select(x => x.Matchweek).Distinct().OrderBy(int.Parse).ToList();
+                _currentGameweek = FixtureExtensions.GetCurrentGameweek(premierLeagueFixturesResponse.data, dateTimeNowGmt);
+                _firstFixturePerGameweeks = premierLeagueFixturesResponse.data!.GetFirstFixturePerGameweek();
             
                 LoadGameweekButtons();
                 TriggerGameweekButton(_currentGameweek);
@@ -142,11 +146,11 @@ namespace Framework.Screens
                 _gameweekButtonPool.Return(child);
 
             _gameweekButtons = new List<GameweekButton>();
-            foreach (var gameweekNumber in _gameweeks)
+            foreach (var fixture in _firstFixturePerGameweeks)
             {
                 var gameweekBtn = _gameweekButtonPool.Get();
-                gameweekBtn.Gameweek = gameweekNumber;
-                gameweekBtn.text.text = $"Gameweek {gameweekNumber}";
+                gameweekBtn.Gameweek = fixture.Matchweek;
+                gameweekBtn.text.text = $"Gameweek {fixture.Matchweek}\n{fixture.Kickoff.Date:dd/MM/yy}";
                 gameweekBtn.gameObject.SetActive(true);
                 _gameweekButtons.Add(gameweekBtn);
             }
@@ -158,42 +162,15 @@ namespace Framework.Screens
                 predictionPanel.gameObject.SetActive(predictionPanel.Fixture.Matchweek == gameweek);
         }
 
-        public void SetGameweekButtonsView(GameweekButton gameweekButton)
+        public void SetGameweekButtonsView(GameweekButton gameweekBtn)
         {
             foreach (var btn in _gameweekButtons)
-                btn.underline.gameObject.SetActive(false);
-            gameweekButton.underline.gameObject.SetActive(true);
-        }
-
-        private static string GetCurrentGameweek(List<Fixture> fixtures, DateTime dateTimeNowGmt)
-        {
-            fixtures.Sort((a, b) => a.Kickoff.CompareTo(b.Kickoff));
-
-            var currentGameweek = "1";
-            foreach (var fixture in fixtures)
             {
-                if (fixture.Kickoff > dateTimeNowGmt)
-                {
-                    if ((fixture.Kickoff - dateTimeNowGmt).TotalHours <= 2)
-                    {
-                        currentGameweek = fixture.Matchweek;
-                    }
-                    else
-                    {
-                        var previousFixture = fixtures
-                            .Where(f => f.Kickoff < dateTimeNowGmt)
-                            .OrderByDescending(f => f.Kickoff)
-                            .FirstOrDefault();
-                            
-                        currentGameweek = previousFixture != null ? 
-                            previousFixture.Matchweek : fixture.Matchweek;
-
-                    }
-                    break;
-                }
-                currentGameweek = fixture.Matchweek;
+                btn.underline.gameObject.SetActive(false);
+                btn.canvasGroup.alpha = 0.5f;
             }
-            return currentGameweek;
+            gameweekBtn.underline.gameObject.SetActive(true);
+            gameweekBtn.canvasGroup.alpha = 1f;
         }
     }
 }

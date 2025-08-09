@@ -96,6 +96,7 @@ MonoBehaviour:
   predictionCard: {fileID: 6859348552249460684, guid: dcaf05463be53674fbfdc20e4c989577, type: 3}
   gameweeksContent: {fileID: 7419509378581190393}
   predictionsContent: {fileID: 7316659994347220288}
+  predictionsScrollRect: {fileID: 4464327999900900569}
 --- !u!1001 &710839231653214718
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -332,6 +333,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4930632056389169182, guid: cf2974db65fddc14bbbba7e805d062c5, type: 3}
   m_PrefabInstance: {fileID: 4723370391504192729}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4464327999900900569 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8969115409468413952, guid: cf2974db65fddc14bbbba7e805d062c5, type: 3}
+  m_PrefabInstance: {fileID: 4723370391504192729}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7316659994347220288 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2595541403464640921, guid: cf2974db65fddc14bbbba7e805d062c5, type: 3}

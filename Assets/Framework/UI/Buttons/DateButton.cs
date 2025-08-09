@@ -11,6 +11,7 @@ namespace Framework.Screens
         public TMP_Text text;
         public Button button;
         public Image underline;
+        public CanvasGroup canvasGroup;
         
         private static MatchesScreen MatchesScreen => MatchesScreen.instance;
         

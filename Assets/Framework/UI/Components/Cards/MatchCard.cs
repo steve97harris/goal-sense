@@ -17,6 +17,8 @@ namespace Framework.Screens
         public RawImage homeTeamLogo;
         public RawImage awayTeamLogo;
 
+        [SerializeField] private Texture2D defaultLogo;
+
         public Fixture Fixture { get; set; }
         
         public void OnDespawn()
@@ -26,8 +28,8 @@ namespace Framework.Screens
             status.text = string.Empty;
             homeTeam.text = string.Empty;
             awayTeam.text = string.Empty;
-            homeTeamLogo.texture = null;
-            awayTeamLogo.texture = null;
+            homeTeamLogo.texture = defaultLogo;
+            awayTeamLogo.texture = defaultLogo;
             Fixture = null;
         }
 
