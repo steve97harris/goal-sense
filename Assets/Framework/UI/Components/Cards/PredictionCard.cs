@@ -5,6 +5,7 @@ using DG.Tweening;
 using Framework.UI.Components.PopUps;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 namespace Framework.Screens
 {
@@ -40,6 +41,7 @@ namespace Framework.Screens
             }
         }
         private bool _isLocked;
+        private bool _isEditingMode;
         
         private static PredictionsScreen PredictionsScreen => PredictionsScreen.instance;
         
@@ -69,8 +71,24 @@ namespace Framework.Screens
         private void Start()
         {
             homeScoreInput.onValueChanged.AddListener(OnHomeScoreInputChanged);
-            editButton.onClick.AddListener(Edit);
+            editButton.onClick.AddListener(EnterEditMode);
             submitButton.onClick.AddListener(Submit);
+        }
+
+        private void Update()
+        {
+            if (!_isEditingMode) 
+                return;
+            // Check if current selected object is one of our input fields or submit button
+            var currentSelected = EventSystem.current.currentSelectedGameObject;
+        
+            if (currentSelected == null || 
+                (currentSelected != homeScoreInput.gameObject && 
+                 currentSelected != awayScoreInput.gameObject && 
+                 currentSelected != submitButton?.gameObject))
+            {
+                ExitEditMode();
+            }
         }
 
         public void Initialize(Fixture fixture, DateTime dateTimeNowGmt, Prediction existingPrediction)
@@ -97,21 +115,34 @@ namespace Framework.Screens
             gameObject.SetActive(true);
         }
 
-        private void Edit()
+        private void EnterEditMode()
         {
+            _isEditingMode = true;
             submitButton.gameObject.SetActive(true);
             editButton.gameObject.SetActive(false);
             homeScoreInput.interactable = true;
             awayScoreInput.interactable = true;
             homeScoreInput.Select();
+            SnapTo(this.GetComponent<RectTransform>());
+        }
+        
+        private void ExitEditMode()
+        {
+            _isEditingMode = false;
+            submitButton.gameObject.SetActive(false);
+            editButton.gameObject.SetActive(true);
+            homeScoreInput.interactable = false;
+            awayScoreInput.interactable = false; 
+            var vlg = PredictionsScreen.predictionsContent
+                    .GetComponent<VerticalLayoutGroup>();
+            vlg.padding.bottom = 60;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(
+                vlg.GetComponent<RectTransform>());
         }
 
         private void Submit()
         {
-            submitButton.gameObject.SetActive(false);
-            editButton.gameObject.SetActive(true);
-            homeScoreInput.interactable = false;
-            awayScoreInput.interactable = false;
+            ExitEditMode();
             SubmitPrediction();
         }
 
@@ -215,6 +246,27 @@ namespace Framework.Screens
             var popUp = Instantiate(submissionFailedPopUp, this.transform);
             popUp.canvasGroup.alpha = 0f;
             popUp.message.text = $"Error, submission failed - {message}";
+        }
+
+        private static void SnapTo(RectTransform target)
+        {
+            PredictionsScreen.predictionsContent
+                .GetComponent<VerticalLayoutGroup>().padding.bottom = 1000;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(
+                PredictionsScreen.predictionsContent.GetComponent<RectTransform>());
+            
+            Canvas.ForceUpdateCanvases();
+
+            var contentPanel = PredictionsScreen.predictionsContent.GetComponent<RectTransform>();
+            var scrollRect = PredictionsScreen.predictionsScrollRect;
+            var destination =
+                (Vector2)scrollRect.transform.InverseTransformPoint(contentPanel.position)
+                - (Vector2)scrollRect.transform.InverseTransformPoint(target.position);
+            var halfScrollHeight = (scrollRect.GetComponent<RectTransform>().rect.size.y / 2);
+            destination = new Vector2(destination.x, 
+                destination.y - halfScrollHeight);
+            
+            contentPanel.DOAnchorPos(destination, 1f);
         }
     }
 }

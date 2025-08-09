@@ -23,7 +23,7 @@ namespace Framework.Screens
         [SerializeField] private Transform gameweeksContent;
         [SerializeField] public Transform predictionsContent;
         [SerializeField] public ScrollRect predictionsScrollRect;
-
+        
         private List<Prediction> _predictions = new List<Prediction>();
         private List<Fixture> _premierLeagueFixtures = new List<Fixture>();
         private List<Fixture> _firstFixturePerGameweeks = new List<Fixture>();

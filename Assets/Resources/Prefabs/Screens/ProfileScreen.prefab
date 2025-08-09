@@ -247,8 +247,8 @@ MonoBehaviour:
   playerNameInputField: {fileID: 74319962418939870}
   savePlayerNameButton: {fileID: 6178670921066355}
   saveEmailButton: {fileID: 2812785683723511604}
-  logoutButton: {fileID: 0}
-  deleteAccountButton: {fileID: 0}
+  logoutButton: {fileID: 7753647727105140134}
+  deleteAccountButton: {fileID: 2756527199044630261}
 --- !u!1 &4120920366170357528
 GameObject:
   m_ObjectHideFlags: 0
@@ -805,11 +805,33 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+--- !u!114 &2756527199044630261 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 538452416556030506, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+  m_PrefabInstance: {fileID: 2394175010542726367}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3524451648156542790 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1283683559867747225, guid: 136ef7278c240404387a815ed373ac49, type: 3}
   m_PrefabInstance: {fileID: 2394175010542726367}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7753647727105140134 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5378332571062618489, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+  m_PrefabInstance: {fileID: 2394175010542726367}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3242356651828128176
 PrefabInstance:
   m_ObjectHideFlags: 0
