@@ -113,7 +113,7 @@ namespace Framework.Screens
             {
                 var date = kvp.Key;
                 var dateDisplay = Instantiate(predictionDateText, predictionsContent);
-                dateDisplay.text.text = date.ToString("d MMM");
+                dateDisplay.text.text = date.ToString("ddd d MMM");
                 dateDisplay.transform.SetSiblingIndex(siblingIdx);
                 
                 foreach (var fixture in kvp.Value.OrderBy(x => x.Kickoff))

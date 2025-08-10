@@ -6,6 +6,7 @@ using Framework.UI.Components.PopUps;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 namespace Framework.Screens
 {
@@ -21,8 +22,8 @@ namespace Framework.Screens
         public RawImage awayTeamLogo;
         public TMP_InputField homeScoreInput;
         public TMP_InputField awayScoreInput;
-        public Button editButton;
-        public Button submitButton;
+        public Button homeScoreEditButton;
+        public Button awayScoreEditButton;
         
         [SerializeField] private SubmittedPopUp submittedPopUp;
         [SerializeField] private SubmissionFailedPopUp submissionFailedPopUp;
@@ -42,6 +43,8 @@ namespace Framework.Screens
         }
         private bool _isLocked;
         private bool _isEditingMode;
+        private string _homePrediction = null;
+        private string _awayPrediction = null;
         
         private static PredictionsScreen PredictionsScreen => PredictionsScreen.instance;
         
@@ -60,35 +63,39 @@ namespace Framework.Screens
             homeScoreInput.onValueChanged.RemoveAllListeners();
             awayScoreInput.onValueChanged.RemoveAllListeners();
             Fixture = null;
-            var submittedPopUp = GetComponentInChildren<SubmittedPopUp>();
-            if (submittedPopUp != null)
-                Destroy(submittedPopUp.gameObject);
-            var submissionFailedPopUp = GetComponentInChildren<SubmissionFailedPopUp>();
-            if (submissionFailedPopUp != null)
-                Destroy(submissionFailedPopUp.gameObject);
+            var popUp = GetComponentInChildren<SubmittedPopUp>();
+            if (popUp != null)
+                Destroy(popUp.gameObject);
+            var failedPopUp = GetComponentInChildren<SubmissionFailedPopUp>();
+            if (failedPopUp != null)
+                Destroy(failedPopUp.gameObject);
         }
 
         private void Start()
         {
             homeScoreInput.onValueChanged.AddListener(OnHomeScoreInputChanged);
-            editButton.onClick.AddListener(EnterEditMode);
-            submitButton.onClick.AddListener(Submit);
+            homeScoreEditButton.onClick.AddListener(EditHomeMode);
+            awayScoreEditButton.onClick.AddListener(EditAwayMode);
+        }
+
+        private void OnDestroy()
+        {
+            homeScoreInput.onValueChanged.RemoveListener(OnHomeScoreInputChanged);
+            homeScoreEditButton.onClick.RemoveListener(EditHomeMode);
+            awayScoreEditButton.onClick.RemoveListener(EditAwayMode);
         }
 
         private void Update()
         {
             if (!_isEditingMode) 
                 return;
-            // Check if current selected object is one of our input fields or submit button
+
             var currentSelected = EventSystem.current.currentSelectedGameObject;
         
             if (currentSelected == null || 
                 (currentSelected != homeScoreInput.gameObject && 
-                 currentSelected != awayScoreInput.gameObject && 
-                 currentSelected != submitButton?.gameObject))
-            {
+                 currentSelected != awayScoreInput.gameObject))
                 ExitEditMode();
-            }
         }
 
         public void Initialize(Fixture fixture, DateTime dateTimeNowGmt, Prediction existingPrediction)
@@ -103,7 +110,9 @@ namespace Framework.Screens
                 existingPrediction.PredictedHomeScore.ToString() : "";
             awayScoreInput.text = existingPrediction != default ? 
                 existingPrediction.PredictedAwayScore.ToString() : "";
-                
+            _homePrediction = homeScoreInput.text;
+            _awayPrediction = awayScoreInput.text;
+            
             // lock prediction if game started
             Locked = dateTimeNowGmt >= fixture.Kickoff;
             if (Locked && existingPrediction is { IsProcessed: true })
@@ -114,36 +123,55 @@ namespace Framework.Screens
             
             gameObject.SetActive(true);
         }
-
-        private void EnterEditMode()
+        
+        private void OnHomeScoreInputChanged(string value)
         {
-            _isEditingMode = true;
-            submitButton.gameObject.SetActive(true);
-            editButton.gameObject.SetActive(false);
-            homeScoreInput.interactable = true;
-            awayScoreInput.interactable = true;
+            if (string.IsNullOrEmpty(value))
+                return;
+            awayScoreInput.Select();
+        }
+        
+        private void EditHomeMode()
+        {
+            SetBothScoreInputsInteractable(true);
             homeScoreInput.Select();
             SnapTo(this.GetComponent<RectTransform>());
+        }
+
+        private void EditAwayMode()
+        {
+            SetBothScoreInputsInteractable(true);
+            awayScoreInput.Select();
+            SnapTo(this.GetComponent<RectTransform>());
+        }
+
+        private void SetBothScoreInputsInteractable(bool interactable)
+        {
+            _isEditingMode = interactable;
+            homeScoreEditButton.gameObject.SetActive(!interactable);
+            awayScoreEditButton.gameObject.SetActive(!interactable);
+            homeScoreInput.interactable = interactable;
+            awayScoreInput.interactable = interactable;
         }
         
         private void ExitEditMode()
         {
-            _isEditingMode = false;
-            submitButton.gameObject.SetActive(false);
-            editButton.gameObject.SetActive(true);
-            homeScoreInput.interactable = false;
-            awayScoreInput.interactable = false; 
+            if (!string.IsNullOrEmpty(homeScoreInput.text) && 
+                !string.IsNullOrEmpty(awayScoreInput.text) &&
+                (_homePrediction != homeScoreInput.text || 
+                 _awayPrediction != awayScoreInput.text))
+            {
+                _homePrediction = homeScoreInput.text;
+                _awayPrediction = awayScoreInput.text;
+                SubmitPrediction();    
+            }
+            
+            SetBothScoreInputsInteractable(false);
             var vlg = PredictionsScreen.predictionsContent
                     .GetComponent<VerticalLayoutGroup>();
             vlg.padding.bottom = 60;
             LayoutRebuilder.ForceRebuildLayoutImmediate(
                 vlg.GetComponent<RectTransform>());
-        }
-
-        private void Submit()
-        {
-            ExitEditMode();
-            SubmitPrediction();
         }
 
         private async void SubmitPrediction()
@@ -221,17 +249,10 @@ namespace Framework.Screens
                 Debug.LogError(e);
             }
         }
-
-        private void OnHomeScoreInputChanged(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return;
-            awayScoreInput.Select();
-        }
         
         private void UpdateLockState()
         {
-            editButton.gameObject.SetActive(!_isLocked);
+            homeScoreEditButton.gameObject.SetActive(!_isLocked);
             lockIcon.gameObject.SetActive(_isLocked);
         }
 
