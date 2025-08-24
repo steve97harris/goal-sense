@@ -105,7 +105,8 @@ namespace Framework.Screens
             _predictionCards = new List<PredictionCard>();
             var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
             var fixtures = _premierLeagueFixtures.Where(x => x.Matchweek == gameweek).ToList();
-            var fixturesByDate = fixtures.GroupBy(x => x.Kickoff.Date)
+            var fixturesByDate = fixtures
+                .GroupBy(x => x.Kickoff.Date)
                 .ToDictionary(x => x.Key, x => x.ToList());;
 
             var siblingIdx = 0;

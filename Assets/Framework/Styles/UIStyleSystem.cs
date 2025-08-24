@@ -21,9 +21,6 @@ namespace Framework.UI.StyleSystem
         
         [Header("Font Sizes")]
         public float HeaderSize = 54f;
-        public float SubheaderSize = 42f;
-        public float BodySize = 36f;
-        public float SmallSize = 24f;
         
         [Header("Colors")]
         public Color PrimaryTextColor = Color.white;
@@ -58,17 +55,14 @@ namespace Framework.UI.StyleSystem
                     break;
                 case TextStyle.Subheader:
                     text.font = PrimaryFont;
-                    text.fontSize = SubheaderSize;
                     text.color = PrimaryTextColor;
                     break;
                 case TextStyle.Body:
                     text.font = SecondaryFont;
-                    text.fontSize = BodySize;
                     text.color = SecondaryTextColor;
                     break;
                 case TextStyle.Small:
                     text.font = SecondaryFont;
-                    text.fontSize = SmallSize;   
                     text.color = SecondaryTextColor;
                     break;
                 case TextStyle.FontOnly:

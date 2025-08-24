@@ -18,4 +18,18 @@ namespace Framework.Services
         public int AwayScore { get; set; }
         public string Location { get; set; }
     }
+    
+    public static class NameExtensions
+    {
+        public static string ToFriendlyName(this string name)
+        {
+            if (name.Equals("Wolverhampton Wanderers FC", StringComparison.InvariantCultureIgnoreCase))
+                return "Wolves";
+            if (name.Equals("Tottenham Hotspurs FC", StringComparison.InvariantCultureIgnoreCase))
+                return "Tottenham";
+            if (name.Equals("Manchester City FC", StringComparison.InvariantCultureIgnoreCase))
+                return "Man City";
+            return name;
+        }
+    }
 }

@@ -8,16 +8,23 @@ namespace Framework.Screens
     {
         [SerializeField] private Button button;
         
+        [SerializeField] private Screen[] returnScreen;
+        
         private static StateMachine StateMachine => StateMachine.Instance;
         
         private void Awake()
         {
-            button.onClick.AddListener(() => StateMachine.GoBack());
+            if (returnScreen.Length == 0)
+                button.onClick.AddListener(() => 
+                    StateMachine.GoBack());
+            else 
+                button.onClick.AddListener(() => 
+                    StateMachine.ChangeState(returnScreen[0].screenName));
         }
 
         private void OnDestroy()
         {
-            button.onClick.RemoveListener(() => StateMachine.GoBack());
+            button.onClick.RemoveAllListeners();
         }
     }
 }

@@ -20,7 +20,8 @@ namespace Framework
         FirstLoadScreen,
         CreateMiniLeagueScreen,
         JoinMiniLeagueScreen,
-        MiniLeagueTableScreen
+        MiniLeagueTableScreen,
+        PredictionResultsScreen
     }
     public enum ScreenViewport
     {
@@ -61,6 +62,12 @@ namespace Framework
         private void Start()
         {
             InitializeIosPredictionsNotifications();
+        }
+        
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F1))
+                ScreenCapture.CaptureScreenshot($"C:\\YR\\Screenshots\\{DateTime.Now.ToString("yyyy-M-d-HH-mm-ss")}.png");
         }
 
         private static async void InitializeIosPredictionsNotifications()

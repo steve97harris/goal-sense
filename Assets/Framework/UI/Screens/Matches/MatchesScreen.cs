@@ -72,7 +72,7 @@ namespace Framework.Screens
             
                 _competitions = competitionsResponse.data!;
             
-                var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
+                var dateTimeNowGmt = DateTime.UtcNow.ConvertUtcTimeToGmt();
                 var yesterdayGmt = dateTimeNowGmt.AddDays(-1);
                 var dateTimeNowPlus2Days = dateTimeNowGmt.AddDays(2);
                 var fixturesResponse = await FixturesService.GetFixturesAsync(yesterdayGmt.ToString("yyyy-MM-dd"), dateTimeNowPlus2Days.ToString("yyyy-MM-dd"));

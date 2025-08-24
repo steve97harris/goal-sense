@@ -10,7 +10,13 @@ namespace Framework.Services
 {
     public class ApiService
     {
+        // development
+        // private const string BASE_URL = "http://localhost:5007";
+        // private const string API_KEY = "dev-goalsense-7k9m2p4x8q1w5e3r7t9y2u6i8o0p3a5s";
+        
+        // production
         private const string BASE_URL = "https://goal-sense-api.onrender.com";
+        private const string API_KEY = "prod-goalsense-9x4c7v2n8m1q5w3e7r9t2y6u4i8o0p5a3s7d9f1g4h6j8k";
 
         [Serializable]
         public class ApiResponse<T>
@@ -42,6 +48,7 @@ namespace Framework.Services
             using (UnityWebRequest request = UnityWebRequest.Get($"{BASE_URL}/{endpoint}{queryString}"))
             {
                 // Set headers
+                request.SetRequestHeader("x-api-key", API_KEY);;
                 request.SetRequestHeader("Content-Type", "application/json");
                 
                 var operation = request.SendWebRequest();
@@ -69,6 +76,7 @@ namespace Framework.Services
                 request.downloadHandler = new DownloadHandlerBuffer();
 
                 // Set headers
+                request.SetRequestHeader("x-api-key", API_KEY);
                 request.SetRequestHeader("Content-Type", "application/json");
 
                 var operation = request.SendWebRequest();

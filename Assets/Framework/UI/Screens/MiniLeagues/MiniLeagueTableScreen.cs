@@ -15,7 +15,7 @@ namespace Framework.Screens.MiniLeagues
            
         public static MiniLeagueTableScreen instance;
         
-        private MiniLeague MiniLeague { get; set; }
+        private static MiniLeague MiniLeague { get; set; }
         
         [SerializeField] private TMP_Text miniLeagueName;
         [SerializeField] private MiniLeagueTableRow miniLeagueTableRow;
@@ -26,10 +26,6 @@ namespace Framework.Screens.MiniLeagues
         {
             if (data is MiniLeague miniLeague)
                 MiniLeague = miniLeague;
-            
-            miniLeagueName.text = MiniLeague.Name;
-            inviteCode.text = $"Invite code: {MiniLeague.InviteCode}";
-            LoadMiniLeagueTable();
         }
         
         private void Awake()
@@ -40,7 +36,14 @@ namespace Framework.Screens.MiniLeagues
                 Destroy(this);
         }
 
-        private async void LoadMiniLeagueTable()
+        private void Start()
+        {
+            miniLeagueName.text = MiniLeague.Name;
+            inviteCode.text = $"Invite code: {MiniLeague.InviteCode}";
+            LoadTable();
+        }
+
+        private async void LoadTable()
         {
             try
             {
@@ -64,6 +67,14 @@ namespace Framework.Screens.MiniLeagues
                     row.playerName.text = data.UserName;
                     row.points.text = data.TotalPoints.ToString();
                     row.position.text = i.ToOrdinal();
+                    row.button.onClick.AddListener(() =>
+                    {
+                        stateMachine.ChangeState(ScreenName.PredictionResultsScreen, new UserData()
+                        {
+                            UserId = data.UserId,
+                            UserName = data.UserName
+                        });
+                    });
                     i++;
                 }
             }
