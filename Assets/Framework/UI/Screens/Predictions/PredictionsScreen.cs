@@ -75,8 +75,8 @@ namespace Framework.Screens
                     return;
             
                 _premierLeagueFixtures = premierLeagueFixturesResponse.data!;
-                _currentGameweek = FixtureExtensions.GetCurrentGameweek(premierLeagueFixturesResponse.data, dateTimeNowGmt);
-                _firstFixturePerGameweeks = premierLeagueFixturesResponse.data!.GetFirstFixturePerGameweek();
+                _currentGameweek = FixtureExtensions.GetCurrentGameweek(_premierLeagueFixtures, dateTimeNowGmt);
+                _firstFixturePerGameweeks = _premierLeagueFixtures.GetFirstFixturePerGameweek();
             
                 LoadGameweekButtons();
                 TriggerGameweekButton(_currentGameweek);
@@ -103,11 +103,13 @@ namespace Framework.Screens
                 Destroy(child.gameObject);
                 
             _predictionCards = new List<PredictionCard>();
-            var dateTimeNowGmt = DateTimeExtensions.ConvertUtcTimeToGmt(DateTime.UtcNow);
+            var dateTimeNowGmt = DateTime.UtcNow.ConvertUtcTimeToGmt();
             var fixtures = _premierLeagueFixtures.Where(x => x.Matchweek == gameweek).ToList();
             var fixturesByDate = fixtures
                 .GroupBy(x => x.Kickoff.Date)
-                .ToDictionary(x => x.Key, x => x.ToList());;
+                .OrderBy(x => x.Key)
+                .ToDictionary(x => x.Key, x => 
+                    x.ToList());
 
             var siblingIdx = 0;
             foreach (var kvp in fixturesByDate)

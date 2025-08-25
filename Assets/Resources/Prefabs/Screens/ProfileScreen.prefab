@@ -668,6 +668,22 @@ PrefabInstance:
       propertyPath: m_text
       value: Delete account
       objectReference: {fileID: 0}
+    - target: {fileID: 439965804527061154, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 439965804527061154, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 439965804527061154, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 439965804527061154, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190335
+      objectReference: {fileID: 0}
     - target: {fileID: 1283683559867747225, guid: 136ef7278c240404387a815ed373ac49, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

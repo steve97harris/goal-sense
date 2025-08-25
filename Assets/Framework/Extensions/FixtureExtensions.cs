@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Framework.Services;
+using UnityEngine;
 
 namespace Framework.Extensions
 {
@@ -38,33 +39,23 @@ namespace Framework.Extensions
 
         public static string GetCurrentGameweek(List<Fixture> fixtures, DateTime dateTimeNowGmt)
         {
-            fixtures.Sort((a, b) => a.Kickoff.CompareTo(b.Kickoff));
+            var fixturesByGw = fixtures
+                .GroupBy(x => x.Matchweek)
+                .ToDictionary(x => int.Parse(x.Key), x => 
+                    x.OrderBy(f => f.Kickoff).ToList())
+                .OrderByDescending(x => x.Key);
 
-            var currentGameweek = "1";
-            foreach (var fixture in fixtures)
+            foreach (var pair in fixturesByGw)
             {
-                if (fixture.Kickoff > dateTimeNowGmt)
+                var gwFixtures = pair.Value;
+                foreach (var fixture in gwFixtures)
                 {
-                    if ((fixture.Kickoff - dateTimeNowGmt).TotalHours <= 2)
-                    {
-                        currentGameweek = fixture.Matchweek;
-                    }
-                    else
-                    {
-                        var previousFixture = fixtures
-                            .Where(f => f.Kickoff < dateTimeNowGmt)
-                            .OrderByDescending(f => f.Kickoff)
-                            .FirstOrDefault();
-                            
-                        currentGameweek = previousFixture != null ? 
-                            previousFixture.Matchweek : fixture.Matchweek;
-
-                    }
-                    break;
+                    if (fixture.Kickoff.AddHours(2) < dateTimeNowGmt)
+                        return pair.Key.ToString();
                 }
-                currentGameweek = fixture.Matchweek;
             }
-            return currentGameweek;
+
+            return "1";
         }
     }
 }

@@ -74,7 +74,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1020098237467417809, guid: 0972de91c62a82944b587e4aa742f02d, type: 3}
       propertyPath: m_Name
-      value: Register-SecondaryButton Variant
+      value: SecondaryButton Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 3838366781471741069, guid: 0972de91c62a82944b587e4aa742f02d, type: 3}
+      propertyPath: m_text
+      value: Create League +
       objectReference: {fileID: 0}
     - target: {fileID: 4745006559469703249, guid: 0972de91c62a82944b587e4aa742f02d, type: 3}
       propertyPath: m_Pivot.x
@@ -174,9 +178,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1283683559867747225}
     m_Modifications:
+    - target: {fileID: 340447162648076666, guid: 08fb831fd26c25b46802b3c93d129e68, type: 3}
+      propertyPath: m_text
+      value: Join League
+      objectReference: {fileID: 0}
     - target: {fileID: 4599584060977359142, guid: 08fb831fd26c25b46802b3c93d129e68, type: 3}
       propertyPath: m_Name
-      value: Login-PrimaryButton Variant
+      value: PrimaryButton Variant
       objectReference: {fileID: 0}
     - target: {fileID: 8080789202221065638, guid: 08fb831fd26c25b46802b3c93d129e68, type: 3}
       propertyPath: m_Pivot.x

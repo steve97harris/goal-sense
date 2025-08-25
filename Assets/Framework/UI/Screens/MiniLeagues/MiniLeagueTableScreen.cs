@@ -1,5 +1,6 @@
 ﻿using Framework.Services;
 using System;
+using System.Linq;
 using Framework.Extensions;
 using Framework.UI.Components;
 using TMPro;
@@ -21,6 +22,7 @@ namespace Framework.Screens.MiniLeagues
         [SerializeField] private MiniLeagueTableRow miniLeagueTableRow;
         [SerializeField] private Transform miniLeagueTableContent;
         [SerializeField] private TMP_Text inviteCode;
+        [SerializeField] private TMP_Text tableGameweekHeader;
         
         public void SetScreenData(object data)
         {
@@ -47,34 +49,40 @@ namespace Framework.Screens.MiniLeagues
         {
             try
             {
-                var response = await MiniLeaguesService.GetMiniLeagueTable(MiniLeague.Id.ToString());
-                if (!response.success)
+                var fixturesResponse = await FixturesService.GetPremierLeagueFixturesAsync();
+                if (!fixturesResponse.success)
                 {
-                    Debug.LogError($"Error failed to load mini league table.\n{response.message}");
+                    Debug.LogError($"Error, failed to load premier league fixtures\n{fixturesResponse.message}");
                     return;
                 }
-            
-                Debug.Log(response.data?.Count + " players in mini league table");
+                
+                var currentGameweek = FixtureExtensions.GetCurrentGameweek(fixturesResponse.data, 
+                    DateTime.UtcNow.ConvertUtcTimeToGmt());
+                tableGameweekHeader.text = $"Gw {currentGameweek}";
+                
+                var tableResponse = await MiniLeaguesService.GetMiniLeagueTable(MiniLeague.Id.ToString());
+                if (!tableResponse.success)
+                {
+                    Debug.LogError($"Error, failed to load mini league table\n{tableResponse.message}");
+                    return;
+                }
+                
+                Debug.Log(tableResponse.data?.Count + " players in mini league table");
                 
                 foreach (Transform child in miniLeagueTableContent)
                     Destroy(child.gameObject);
 
-                var miniLeagueTable = response.data!;
+                var miniLeagueTable = tableResponse.data!;
+                var gwFixtures = fixturesResponse.data!
+                    .Where(x => x.Matchweek == currentGameweek)
+                    .Select(x => x.Id)
+                    .ToArray();
+                
                 var i = 1;
                 foreach (var data in miniLeagueTable)   
                 {
                     var row = Instantiate(miniLeagueTableRow, miniLeagueTableContent);
-                    row.playerName.text = data.UserName;
-                    row.points.text = data.TotalPoints.ToString();
-                    row.position.text = i.ToOrdinal();
-                    row.button.onClick.AddListener(() =>
-                    {
-                        stateMachine.ChangeState(ScreenName.PredictionResultsScreen, new UserData()
-                        {
-                            UserId = data.UserId,
-                            UserName = data.UserName
-                        });
-                    });
+                    row.Initialize(data, i.ToOrdinal(), gwFixtures);
                     i++;
                 }
             }

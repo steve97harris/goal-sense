@@ -140,8 +140,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Tottenham Hotspur
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
-  m_sharedMaterial: {fileID: -592416375926974753, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
+  m_sharedMaterial: {fileID: 1130111527207623619, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14117648, g: 0.17254902, b: 0.23137255, a: 0.7607843}
+  m_Color: {r: 0.23529412, g: 0.24313726, b: 0.29411766, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -532,8 +532,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Manchester City & Hove Albion
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
-  m_sharedMaterial: {fileID: -592416375926974753, guid: 18ef7019ef144694a91505fbe4b0351d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
+  m_sharedMaterial: {fileID: 1130111527207623619, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1143,7 +1143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5987640832259413668, guid: 022719cd66fa46e419144617992f01c7, type: 3}
       propertyPath: m_fontSize
-      value: 48
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 5987640832259413668, guid: 022719cd66fa46e419144617992f01c7, type: 3}
       propertyPath: m_fontAsset
@@ -1151,7 +1151,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: d9be92f9af677ba4f991eea1d0f8f668, type: 2}
     - target: {fileID: 5987640832259413668, guid: 022719cd66fa46e419144617992f01c7, type: 3}
       propertyPath: m_fontSizeBase
-      value: 48
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 5987640832259413668, guid: 022719cd66fa46e419144617992f01c7, type: 3}
       propertyPath: m_sharedMaterial

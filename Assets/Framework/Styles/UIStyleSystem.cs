@@ -9,7 +9,7 @@ namespace Framework.UI.StyleSystem
         Subheader,
         Body,
         Small,
-        FontOnly
+        SecondaryFont
     }
     
     [CreateAssetMenu(fileName = "UIStyle", menuName = "Styles/UI Style")]
@@ -65,10 +65,10 @@ namespace Framework.UI.StyleSystem
                     text.font = SecondaryFont;
                     text.color = SecondaryTextColor;
                     break;
-                case TextStyle.FontOnly:
+                case TextStyle.SecondaryFont:
                     text.font = SecondaryFont;
                     break;
             }
         }
     }
-}
+} 
