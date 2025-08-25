@@ -174,7 +174,7 @@ namespace Framework.Screens
                 gameweekBtn.gameweekPoints.text =
                     predictionPointsPerGw.TryGetValue(fixture.Matchweek, out var points) && 
                     points > 0
-                        ? $"{points}"
+                        ? $"{points} pts"
                         : "-";
                 gameweekBtn.gameObject.SetActive(true);
                 _gameweekButtons.Add(gameweekBtn);

@@ -105,6 +105,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BottomButtons
       objectReference: {fileID: 0}
+    - target: {fileID: 439965804527061154, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+      propertyPath: m_text
+      value: Create account
+      objectReference: {fileID: 0}
     - target: {fileID: 1283683559867747225, guid: 136ef7278c240404387a815ed373ac49, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -185,6 +189,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4429168325222760702, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+      propertyPath: m_Name
+      value: Register-SecondaryButton Variant
+      objectReference: {fileID: 0}
     - target: {fileID: 4565930832801619757, guid: 136ef7278c240404387a815ed373ac49, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -204,6 +212,14 @@ PrefabInstance:
     - target: {fileID: 4565930832801619757, guid: 136ef7278c240404387a815ed373ac49, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458444067194772465, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+      propertyPath: m_text
+      value: Login
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119086625743213485, guid: 136ef7278c240404387a815ed373ac49, type: 3}
+      propertyPath: m_Name
+      value: Login-PrimaryButton Variant
       objectReference: {fileID: 0}
     - target: {fileID: 8252330106538216574, guid: 136ef7278c240404387a815ed373ac49, type: 3}
       propertyPath: m_AnchorMax.y

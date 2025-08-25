@@ -17,7 +17,7 @@ namespace Framework.Screens
         public override ScreenName screenName => ScreenName.ProfileScreen;
         public override ScreenViewport screenViewport => ScreenViewport.MainView;
 
-        public DeleteAccountPopUp deleteAccountPopUp;
+        public AreYouSurePopUp areYouSurePopUp;
         
         [SerializeField] private TMP_InputField emailInputField;
         [SerializeField] private TMP_InputField playerNameInputField;
@@ -29,11 +29,13 @@ namespace Framework.Screens
         private string _userFullName;
         private string _email;
 
+        private static StateMachine StateMachine => StateMachine.Instance;
+        
         private void Awake()
         {
             LoadUserInfo();
-            logoutButton.onClick.AddListener(Logout);
-            deleteAccountButton.onClick.AddListener(DeleteAccount);
+            logoutButton.onClick.AddListener(LogoutClicked);
+            deleteAccountButton.onClick.AddListener(DeleteAccountClicked);
             savePlayerNameButton.onClick.AddListener(SavePlayerName);
             saveEmailButton.onClick.AddListener(SaveEmail);
             playerNameInputField.onValueChanged.AddListener(PlayerNameChanged);
@@ -42,8 +44,8 @@ namespace Framework.Screens
 
         private void OnDestroy()
         {
-            logoutButton.onClick.RemoveListener(Logout);
-            deleteAccountButton.onClick.RemoveListener(DeleteAccount);
+            logoutButton.onClick.RemoveListener(LogoutClicked);
+            deleteAccountButton.onClick.RemoveListener(DeleteAccountClicked);
             savePlayerNameButton.onClick.RemoveListener(SavePlayerName);
             saveEmailButton.onClick.RemoveListener(SaveEmail);
             playerNameInputField.onValueChanged.RemoveListener(PlayerNameChanged);
@@ -125,16 +127,43 @@ namespace Framework.Screens
             cg.alpha = enable ? 1 : 0.3f;
         }
 
-        private static void Logout()
+        private void LogoutClicked()
+        {
+            var popUp = Instantiate(areYouSurePopUp, this.transform);
+            popUp.Initialize("Are you sure you wish to logout?", Logout);
+        }
+
+        private void Logout()
         {
             PlayerPrefs.DeleteKey(PlayerPrefsKeys.JWT_TOKEN);
             PlayerPrefs.DeleteKey(PlayerPrefsKeys.USER_ID);
-            stateMachine.ChangeState(ScreenName.LoginScreen);
+            StateMachine.ChangeState(ScreenName.LoginScreen);
         }
 
-        private void DeleteAccount()
+        private void DeleteAccountClicked()
         {
-            deleteAccountPopUp.gameObject.SetActive(true);
+            var popUp = Instantiate(areYouSurePopUp, this.transform);
+            popUp.Initialize("Are you sure you wish to delete your account?", ConfirmDeleteAccount);
+        }
+        
+        private async void ConfirmDeleteAccount()
+        {
+            try
+            {
+                var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    Debug.LogError("User id is null");
+                    return;
+                }
+
+                await UserAuthService.DeleteUserAccountAsync(userId);
+                StateMachine.ChangeState(ScreenName.LoginScreen);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         private async void LoadUserInfo()

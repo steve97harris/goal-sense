@@ -41,7 +41,7 @@ namespace Framework.Screens.MiniLeagues
         private void Start()
         {
             miniLeagueName.text = MiniLeague.Name;
-            inviteCode.text = $"Invite code: {MiniLeague.InviteCode}";
+            inviteCode.text = $"Invite code:\n{MiniLeague.InviteCode}";
             LoadTable();
         }
 
