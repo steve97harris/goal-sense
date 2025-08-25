@@ -88,7 +88,7 @@ namespace Framework.Screens
                         row.prediction.text = $"{prediction.PredictedHomeScore} - {prediction.PredictedAwayScore}";
                         row.pointsAwarded.text = $"{prediction.PointsAwarded} pts";
                     }
-                    row.match.text = $"{fixture.HomeTeam.ToFriendlyName()} vs {fixture.AwayTeam.ToFriendlyName()}\nResult: {fixture.HomeScore} - {fixture.AwayScore}";
+                    row.match.text = $"{fixture.HomeTeam.ToFriendlyTeamName()} vs {fixture.AwayTeam.ToFriendlyTeamName()}\nResult: {fixture.HomeScore} - {fixture.AwayScore}";
                     row.date.text = $"Gw {fixture.Matchweek}\n{fixture.Kickoff.Date:dd/MM/yyyy}\n{fixture.Kickoff:hh:mm tt}";
                 }
             }

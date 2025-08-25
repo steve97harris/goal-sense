@@ -148,12 +148,34 @@ namespace Framework.Screens
             foreach (var child in _gameweekButtons)
                 _gameweekButtonPool.Return(child);
 
+            var predictionsByFixture = _predictions.ToDictionary(x => x.FixtureId);
+            var fixtures = _premierLeagueFixtures
+                .ToDictionary(x => x.Id);
+
+            var predictionPointsPerGw = new Dictionary<string, int>();
+            foreach (var pair in predictionsByFixture)
+            {
+                var fixtureId = pair.Key;
+                var fixture = fixtures[fixtureId];
+                var prediction = pair.Value;
+                var gameweek = fixture.Matchweek;
+                if (predictionPointsPerGw.ContainsKey(gameweek))
+                    predictionPointsPerGw[gameweek] += prediction.PointsAwarded;
+                else 
+                    predictionPointsPerGw.Add(gameweek, prediction.PointsAwarded);
+            }
+            
             _gameweekButtons = new List<GameweekButton>();
             foreach (var fixture in _firstFixturePerGameweeks)
             {
                 var gameweekBtn = _gameweekButtonPool.Get();
                 gameweekBtn.Gameweek = fixture.Matchweek;
-                gameweekBtn.text.text = $"Gameweek {fixture.Matchweek}\n{fixture.Kickoff.Date:dd/MM/yy}";
+                gameweekBtn.text.text = $"Gameweek {fixture.Matchweek}";
+                gameweekBtn.gameweekPoints.text =
+                    predictionPointsPerGw.TryGetValue(fixture.Matchweek, out var points) && 
+                    points > 0
+                        ? $"{points}"
+                        : "-";
                 gameweekBtn.gameObject.SetActive(true);
                 _gameweekButtons.Add(gameweekBtn);
             }

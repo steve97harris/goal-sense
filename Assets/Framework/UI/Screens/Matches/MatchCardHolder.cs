@@ -13,6 +13,7 @@ namespace Framework.Screens
         public TMP_Text headerText;
         public Image downArrow;
         public Image upArrow;
+        public RawImage flagIcon;
 
         private bool _matchesEnabled = true;
 

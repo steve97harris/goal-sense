@@ -37,8 +37,8 @@ namespace Framework.Screens
         {
             Fixture = fixture;
 
-            homeTeam.text = fixture.HomeTeam.ToFriendlyName();
-            awayTeam.text = fixture.AwayTeam.ToFriendlyName();
+            homeTeam.text = fixture.HomeTeam.ToFriendlyTeamName();
+            awayTeam.text = fixture.AwayTeam.ToFriendlyTeamName();
             kickoffTime.text = fixture.Kickoff.ToString("h:mm tt").ToLower();
             kickoffTime.gameObject.SetActive(fixture.Status is "TIMED" or "SCHEDULED");
             status.text = fixture.GetStatusShort();

@@ -10,6 +10,7 @@ namespace Framework.Screens
         public string Gameweek { get; set; }
         
         public TMP_Text text;
+        public TMP_Text gameweekPoints;
         public Button button;
         public Image underline;
         public CanvasGroup canvasGroup;
@@ -20,6 +21,7 @@ namespace Framework.Screens
         {
             text.text = string.Empty;
             underline.gameObject.SetActive(false);
+            gameweekPoints.text = "-";
             Gameweek = string.Empty;
             button.onClick.RemoveAllListeners();
         }

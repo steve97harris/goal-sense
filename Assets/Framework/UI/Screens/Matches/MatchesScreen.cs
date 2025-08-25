@@ -126,7 +126,11 @@ namespace Framework.Screens
             foreach (var kvp in fixturesByLeagueId)
             {
                 var matchHolder = _matchCardHolderPool.Get();
-                matchHolder.headerText.text = competitionsById[kvp.Key].Name;;
+                matchHolder.headerText.text = competitionsById[kvp.Key].Name.ToFriendlyLeagueName();
+                var flagIcon = GetFlagIcon(competitionsById[kvp.Key].Code);
+                matchHolder.flagIcon.gameObject.SetActive(flagIcon != null);
+                if (flagIcon != null)
+                    matchHolder.flagIcon.texture = flagIcon;
                 
                 foreach (var fixture in kvp.Value.OrderBy(x => x.Kickoff))
                 {
@@ -139,6 +143,28 @@ namespace Framework.Screens
             }
 
             _noMatchesCard.SetActive(fixturesByLeagueId.Count == 0);
+        }
+
+        private Texture2D GetFlagIcon(string competitionCode)
+        {
+            return Resources.Load<Texture2D>($"Images/Icons/Flags/{FlagForCompetitionCode(competitionCode)}");
+        }
+
+        private static string FlagForCompetitionCode(string competitionCode)
+        {
+            return competitionCode switch
+            {
+                "PL" or "ELC" => "england",
+                "SA" => "italy",
+                "CL" or "EC" => "europe",
+                "PD" => "spain",
+                "PPL" => "portugal",
+                "DED" => "netherlands",
+                "BL1" => "germany",
+                "FL1" => "france",
+                "BSA" => "brazil",
+                _ => competitionCode
+            };
         }
 
         private void LoadDateButtons(List<DateTime> dates)
