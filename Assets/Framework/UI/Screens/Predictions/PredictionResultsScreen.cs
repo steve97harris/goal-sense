@@ -21,6 +21,7 @@ namespace Framework.Screens
         [SerializeField] private TMP_Text usernameHeader;
         [SerializeField] private PredictionResultTableRow predictionResultTableRow;
         [SerializeField] private Transform tableContent;
+        [SerializeField] private GameObject gameweekScrollBreak;
         
         public void SetScreenData(object data)
         {
@@ -73,9 +74,16 @@ namespace Framework.Screens
                 
                 var predictions = response.data!
                     .ToDictionary(x => x.FixtureId);
-                
+
+                var lastGameweek = "";
                 foreach (var data in fixtures)   
                 {
+                    if (lastGameweek != data.Value.Matchweek)
+                    {
+                        lastGameweek = data.Value.Matchweek;
+                        var gwBreak = Instantiate(gameweekScrollBreak, tableContent);
+                        gwBreak.transform.GetComponentInChildren<TMP_Text>().text = $"Gameweek {lastGameweek}";
+                    }
                     var fixture = data.Value;
                     var row = Instantiate(predictionResultTableRow, tableContent);
                     if (!predictions.TryGetValue(fixture.Id, out var prediction))
@@ -89,7 +97,7 @@ namespace Framework.Screens
                         row.pointsAwarded.text = $"{prediction.PointsAwarded} pts";
                     }
                     row.match.text = $"{fixture.HomeTeam.ToFriendlyTeamName()} vs {fixture.AwayTeam.ToFriendlyTeamName()}\nResult: {fixture.HomeScore} - {fixture.AwayScore}";
-                    row.date.text = $"Gw {fixture.Matchweek}\n{fixture.Kickoff.Date:dd/MM/yyyy}\n{fixture.Kickoff:hh:mm tt}";
+                    row.date.text = $"{fixture.Kickoff.Date:dd/MM/yyyy}\n{fixture.Kickoff:hh:mm tt}";
                 }
             }
             catch (Exception e)

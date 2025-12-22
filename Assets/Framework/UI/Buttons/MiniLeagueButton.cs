@@ -11,6 +11,7 @@ namespace Framework.Screens
         public MiniLeague MiniLeague { get; set; }
         
         public TMP_Text text;
+        public TMP_Text leaguePosition;
         public Button button;
         
         private static MiniLeaguesScreen MiniLeaguesScreen => MiniLeaguesScreen.instance;

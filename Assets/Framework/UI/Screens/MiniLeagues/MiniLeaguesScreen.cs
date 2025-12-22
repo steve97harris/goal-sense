@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Framework.Extensions;
 using Framework.Services;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -49,32 +51,62 @@ namespace Framework.Screens.MiniLeagues
 
         private async void LoadUsersMiniLeagues()
         {
-            var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
-            if (string.IsNullOrEmpty(userId))
+            try
             {
-                Debug.LogError("User ID is null, please login");
-                return;
-            }
+                var userId = PlayerPrefs.GetString(PlayerPrefsKeys.USER_ID);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    Debug.LogError("User ID is null, please login");
+                    return;
+                }
 
-            var response = await MiniLeaguesService.GetUsersMiniLeagues(userId);
-            if (!response.success)
+                var response = await MiniLeaguesService.GetUsersMiniLeagues(userId);
+                if (!response.success)
+                {
+                    Debug.LogError(response.message);
+                    return;
+                }
+            
+                var leagues = response.data!;
+
+                foreach (Transform child in miniLeaguesContent)
+                    Destroy(child.gameObject);
+            
+                foreach (var miniLeague in leagues)
+                {
+                    var btn = Instantiate(this.miniLeagueButton, miniLeaguesContent);
+                    btn.MiniLeague = miniLeague;
+                    btn.text.text = miniLeague.Name;
+                
+                    var position = await GetUsersMiniLeagueTablePosition(
+                        miniLeague.Id.ToString(), userId);
+                    btn.leaguePosition.text = position;
+                
+                    btn.gameObject.SetActive(true);
+                }
+            }
+            catch (Exception e)
             {
-                Debug.LogError(response.message);
-                return;
+                Debug.LogError(e);
+            }
+        }
+        
+        private async Task<string> GetUsersMiniLeagueTablePosition(
+            string miniLeagueId, string userId)
+        {
+            var tableResponse = await MiniLeaguesService.GetMiniLeagueTable(miniLeagueId);
+            if (!tableResponse.success)
+            {
+                Debug.LogError($"Error, failed to load mini league table\n{tableResponse.message}");
+                return null;
             }
             
-            var leagues = response.data!;
-
-            foreach (Transform child in miniLeaguesContent)
-                Destroy(child.gameObject);
-            
-            foreach (var miniLeague in leagues)
-            {
-                var miniLeagueButton = Instantiate(this.miniLeagueButton, miniLeaguesContent);
-                miniLeagueButton.MiniLeague = miniLeague;
-                miniLeagueButton.text.text = miniLeague.Name;
-                miniLeagueButton.gameObject.SetActive(true);
-            }
+            var miniLeagueTable = tableResponse.data!;   
+            var userLeagueTableData = miniLeagueTable
+                .FirstOrDefault(x =>
+                    x.UserId.ToString() == userId);
+            return userLeagueTableData == null ? "-" : 
+                (miniLeagueTable.IndexOf(userLeagueTableData) + 1).ToString();
         }
     }
 }

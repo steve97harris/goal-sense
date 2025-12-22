@@ -366,10 +366,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4236290192585469673, guid: 38339aaa4f7f8f44e9d0892e0265fbbe, type: 3}
-      propertyPath: m_Padding.m_Bottom
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 4388633569855380870, guid: 38339aaa4f7f8f44e9d0892e0265fbbe, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

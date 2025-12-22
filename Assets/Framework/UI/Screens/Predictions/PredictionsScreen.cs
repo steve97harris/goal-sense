@@ -1,4 +1,5 @@
-﻿using Framework.Extensions;
+﻿using DG.Tweening;
+using Framework.Extensions;
 using Framework.Services;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,10 @@ namespace Framework.Screens
         [SerializeField] private GameweekButton gameweekButton;
         [SerializeField] private PredictionDateText predictionDateText;
         [SerializeField] private PredictionCard predictionCard;
+        [SerializeField] private ScrollRect gameweeksScrollRect;
         [SerializeField] private Transform gameweeksContent;
-        [SerializeField] public Transform predictionsContent;
         [SerializeField] public ScrollRect predictionsScrollRect;
+        [SerializeField] public Transform predictionsContent;
         
         private List<Prediction> _predictions = new List<Prediction>();
         private List<Fixture> _premierLeagueFixtures = new List<Fixture>();
@@ -32,6 +34,7 @@ namespace Framework.Screens
         private ObjectPool<GameweekButton> _gameweekButtonPool;
         private List<PredictionCard> _predictionCards = new List<PredictionCard>();
         private List<GameweekButton> _gameweekButtons = new List<GameweekButton>();
+        private Tween _scrollTween;
 
         private void Awake()
         {
@@ -77,7 +80,7 @@ namespace Framework.Screens
                 _premierLeagueFixtures = premierLeagueFixturesResponse.data!;
                 _currentGameweek = FixtureExtensions.GetCurrentGameweek(_premierLeagueFixtures, dateTimeNowGmt);
                 _firstFixturePerGameweeks = _premierLeagueFixtures.GetFirstFixturePerGameweek();
-            
+                
                 LoadGameweekButtons();
                 TriggerGameweekButton(_currentGameweek);
             }
@@ -93,6 +96,47 @@ namespace Framework.Screens
             if (gameweekButtonObj == null)
                 return;
             gameweekButtonObj.button.onClick.Invoke();
+            SnapToButton(gameweekButtonObj);
+        }
+        
+        private void SnapToButton(GameweekButton targetButton)
+        {
+            // Kill any active scroll tween to prevent conflicts
+            _scrollTween?.Kill();
+
+            // Force layout rebuild so positions are accurate
+            Canvas.ForceUpdateCanvases();
+
+            var contentRect = gameweeksScrollRect.content;
+            var viewportRect = gameweeksScrollRect.viewport != null ? 
+                gameweeksScrollRect.viewport : (RectTransform)gameweeksScrollRect.transform;
+            var buttonRect = targetButton.GetComponent<RectTransform>();
+
+            // 1. Calculate the button center position relative to content
+            var buttonPosInContent = contentRect.InverseTransformPoint(
+                buttonRect.TransformPoint(buttonRect.rect.center));
+            var targetX = buttonPosInContent.x;
+
+            var contentWidth = contentRect.rect.width;
+            var viewportWidth = viewportRect.rect.width;
+
+            if (contentWidth <= viewportWidth) return;
+
+            // 2. Calculate bounds for the center point
+            // The normalized position logic in ScrollRect works between 0 and 1.
+            // We clamp the target position so that the first/last buttons stay at the edges.
+            var minX = viewportWidth / 2f;
+            var maxX = contentWidth - viewportWidth / 2f;
+            
+            // Adjust targetX to account for the content pivot
+            var clampedX = Mathf.Clamp(targetX + (contentWidth * contentRect.pivot.x), minX, maxX);
+            
+            // 3. Convert to 0-1 normalized value
+            var targetNormalizedPos = (clampedX - minX) / (maxX - minX);
+
+            // 4. Animate using DOTween
+            _scrollTween = gameweeksScrollRect.DOHorizontalNormalizedPos(targetNormalizedPos, 0.5f)
+                .SetEase(Ease.OutCubic);
         }
 
         public void LoadMatchesByGameweek(string gameweek)

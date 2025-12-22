@@ -26,8 +26,7 @@ namespace Framework.Screens
         {
             get
             {
-                var colour = Color.green;
-                colour.a = 0.5f;
+                ColorUtility.TryParseHtmlString("#FFC400", out var colour);
                 return colour;
             }
         }
